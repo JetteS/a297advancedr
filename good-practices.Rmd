@@ -580,7 +580,7 @@ Finally, you can also search for specific `R`-related sites on [https://rseek.or
 
 ## Summary
 
-* Use meaningful and concise names for four files, data sets, and functions.
+* Use meaningful and concise names for your files, data sets, and functions.
 * Comment your code and explain *why* you are doing what you are doing.
 * Follow the available style guides (e.g. the [tidyverse style guide](https://style.tidyverse.org/)). You can use the `R` package [`styler`](https://github.com/r-lib/styler) to conveniently correct your style.
 * Use the [RStudio](https://posit.co/download/rstudio-desktop/#download) IDE; It comes with many tools and features (i.e. useful keyboard shortcuts, panels, interactive data importation from files and connections, code diagnostics, and RStudio projects).

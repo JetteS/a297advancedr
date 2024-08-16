@@ -42,6 +42,7 @@ program
 other-chapters-from-this-book
 other-resources
 other-tidy-packages
+summary-3
 performance
 rs-memory-management
 understanding-binding-basics

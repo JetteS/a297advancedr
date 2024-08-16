@@ -23,7 +23,7 @@
 <meta name="author" content="Florian Privé" />
 
 
-<meta name="date" content="2024-08-11" />
+<meta name="date" content="2024-08-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -240,6 +240,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.2" data-path="tidyverse.html"><a href="tidyverse.html#other-chapters-from-this-book"><i class="fa fa-check"></i><b>5.2</b> Other chapters from this book</a></li>
 <li class="chapter" data-level="5.3" data-path="tidyverse.html"><a href="tidyverse.html#other-resources"><i class="fa fa-check"></i><b>5.3</b> Other resources</a></li>
 <li class="chapter" data-level="5.4" data-path="tidyverse.html"><a href="tidyverse.html#other-tidy-packages"><i class="fa fa-check"></i><b>5.4</b> Other “tidy” packages</a></li>
+<li class="chapter" data-level="5.5" data-path="tidyverse.html"><a href="tidyverse.html#summary-3"><i class="fa fa-check"></i><b>5.5</b> Summary</a></li>
+<li class="chapter" data-level="" data-path="tidyverse.html"><a href="tidyverse.html#useful-resources-4"><i class="fa fa-check"></i>Useful resources</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="performance.html"><a href="performance.html"><i class="fa fa-check"></i><b>6</b> Performance</a>
 <ul>
@@ -456,7 +458,7 @@ For example, take the real number 0.3. In base two, 0.3 is represented by 0.0100
 <h3><span class="header-section-number">3.1.3</span> Others<a href="r-programming.html#others" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p><code>R</code> has many base functions that behave differently than you may expect. One of them is <code>sample()</code>. <code>sample()</code> creates a sample of a specified size from the elements of the first argument <code>x</code> with or without replacement. The most common use of <code>sample()</code> is probably to let <code>x</code> be a vector:</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="r-programming.html#cb32-1" tabindex="-1"></a><span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
-<span id="cb32-2"><a href="r-programming.html#cb32-2" tabindex="-1"></a><span class="co">#&gt;  [1]  1  4 10  7  8  5  6  9  3  2</span></span></code></pre></div>
+<span id="cb32-2"><a href="r-programming.html#cb32-2" tabindex="-1"></a><span class="co">#&gt;  [1]  7  1  5  2  6  8  4  9  3 10</span></span></code></pre></div>
 <p>But have you ever tried to pass a single number? Or even a real number?</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="r-programming.html#cb33-1" tabindex="-1"></a><span class="fu">sample</span>(<span class="dv">10</span>)</span>
 <span id="cb33-2"><a href="r-programming.html#cb33-2" tabindex="-1"></a><span class="fu">sample</span>(<span class="fl">10.1</span>)</span></code></pre></div>
@@ -466,9 +468,9 @@ What do you think <code>R</code> returns?
 Show me!
 </summary>
 <div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="r-programming.html#cb34-1" tabindex="-1"></a><span class="fu">sample</span>(<span class="dv">10</span>)</span>
-<span id="cb34-2"><a href="r-programming.html#cb34-2" tabindex="-1"></a><span class="co">#&gt;  [1]  7  9  6  3  5 10  1  4  2  8</span></span>
+<span id="cb34-2"><a href="r-programming.html#cb34-2" tabindex="-1"></a><span class="co">#&gt;  [1]  4  6  5  9  8  2  7  3  1 10</span></span>
 <span id="cb34-3"><a href="r-programming.html#cb34-3" tabindex="-1"></a><span class="fu">sample</span>(<span class="fl">10.1</span>)</span>
-<span id="cb34-4"><a href="r-programming.html#cb34-4" tabindex="-1"></a><span class="co">#&gt;  [1]  7  6  9  8  5  4  1 10  2  3</span></span></code></pre></div>
+<span id="cb34-4"><a href="r-programming.html#cb34-4" tabindex="-1"></a><span class="co">#&gt;  [1]  1  4  7  5  8  9  3  6  2 10</span></span></code></pre></div>
 <p>Did you expect this outcome? In case you are confused, here is the reason why:.</p>
 <p>The first argument of <code>sample()</code> is <code>x</code>. <code>x</code> can either be a vector of one or more elements from which to choose, or a positive integer. If <code>x</code> has length one, is numeric and larger than 1, the sampling will take place from the sequence <code>1:x</code>. On the other hand, <code>1:x</code> generates a vector of real numbers; starting with 1 and increasing with 1 until the upper limit <code>x</code> is reached. Hence, when <code>x</code> = 10.1, <code>1:x</code> is equal to the sequence <code>1,2,...,10</code>, and <code>sample(x)</code> is equivalent to <code>sample(1:10)</code>.</p>
 </details>
@@ -600,17 +602,17 @@ Show me!
 <span id="cb46-12"><a href="r-programming.html#cb46-12" tabindex="-1"></a><span class="co">#&gt; [1] 1 1 2 2 3 3 4 4</span></span></code></pre></div></li>
 <li><p><code>replicate(n, expr)</code> : Repeated evaluation of an expression. Wrapper for the common use of <code>sapply</code>.</p>
 <div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="r-programming.html#cb47-1" tabindex="-1"></a><span class="fu">replicate</span>(<span class="dv">5</span>, <span class="fu">rnorm</span>(<span class="dv">10</span>))</span>
-<span id="cb47-2"><a href="r-programming.html#cb47-2" tabindex="-1"></a><span class="co">#&gt;             [,1]        [,2]       [,3]         [,4]       [,5]</span></span>
-<span id="cb47-3"><a href="r-programming.html#cb47-3" tabindex="-1"></a><span class="co">#&gt;  [1,]  0.3928537 -0.28373537  0.6690147 -0.650373793 -0.3839297</span></span>
-<span id="cb47-4"><a href="r-programming.html#cb47-4" tabindex="-1"></a><span class="co">#&gt;  [2,]  0.2514292  0.86957892  0.6551130  0.361207095  0.6028730</span></span>
-<span id="cb47-5"><a href="r-programming.html#cb47-5" tabindex="-1"></a><span class="co">#&gt;  [3,]  0.6713821 -1.65644374 -1.9156641  2.305896261  0.6995976</span></span>
-<span id="cb47-6"><a href="r-programming.html#cb47-6" tabindex="-1"></a><span class="co">#&gt;  [4,]  0.1868415 -0.05759736  0.3311115 -0.125503883 -0.5702729</span></span>
-<span id="cb47-7"><a href="r-programming.html#cb47-7" tabindex="-1"></a><span class="co">#&gt;  [5,]  0.1417200 -0.43984380  0.6116932 -0.245779027 -0.4344933</span></span>
-<span id="cb47-8"><a href="r-programming.html#cb47-8" tabindex="-1"></a><span class="co">#&gt;  [6,]  0.3102932  1.49345583 -0.9004550  1.013470122 -0.1555287</span></span>
-<span id="cb47-9"><a href="r-programming.html#cb47-9" tabindex="-1"></a><span class="co">#&gt;  [7,]  0.5783831 -0.50611405  1.1593167  0.005964447  0.1692015</span></span>
-<span id="cb47-10"><a href="r-programming.html#cb47-10" tabindex="-1"></a><span class="co">#&gt;  [8,] -0.4707181  0.15526396  1.0061900 -0.177206689 -1.1037162</span></span>
-<span id="cb47-11"><a href="r-programming.html#cb47-11" tabindex="-1"></a><span class="co">#&gt;  [9,]  0.7146127 -0.54928444  1.0485541 -3.124126916  0.5782964</span></span>
-<span id="cb47-12"><a href="r-programming.html#cb47-12" tabindex="-1"></a><span class="co">#&gt; [10,] -0.7992643  0.40618243 -1.9363785 -2.345459946  0.4681703</span></span></code></pre></div>
+<span id="cb47-2"><a href="r-programming.html#cb47-2" tabindex="-1"></a><span class="co">#&gt;               [,1]       [,2]        [,3]       [,4]        [,5]</span></span>
+<span id="cb47-3"><a href="r-programming.html#cb47-3" tabindex="-1"></a><span class="co">#&gt;  [1,] -0.795544056  1.3327794 -0.95791171 -0.4179342  1.02123359</span></span>
+<span id="cb47-4"><a href="r-programming.html#cb47-4" tabindex="-1"></a><span class="co">#&gt;  [2,]  0.105544334  0.2158336 -0.78546352  0.8334043 -0.89292099</span></span>
+<span id="cb47-5"><a href="r-programming.html#cb47-5" tabindex="-1"></a><span class="co">#&gt;  [3,]  1.084928362 -0.4580454 -0.49121354  0.1840888  1.03396732</span></span>
+<span id="cb47-6"><a href="r-programming.html#cb47-6" tabindex="-1"></a><span class="co">#&gt;  [4,] -0.953227817 -2.2119830  0.97024656  0.1216654  0.96423417</span></span>
+<span id="cb47-7"><a href="r-programming.html#cb47-7" tabindex="-1"></a><span class="co">#&gt;  [5,]  0.800119022  1.3199964 -0.92907336  0.4241002  0.05948335</span></span>
+<span id="cb47-8"><a href="r-programming.html#cb47-8" tabindex="-1"></a><span class="co">#&gt;  [6,]  0.049847398 -0.7592053 -1.57974078 -0.8324571 -1.21544889</span></span>
+<span id="cb47-9"><a href="r-programming.html#cb47-9" tabindex="-1"></a><span class="co">#&gt;  [7,] -0.005136282  0.2007261 -0.25226230 -0.5450824  0.30363625</span></span>
+<span id="cb47-10"><a href="r-programming.html#cb47-10" tabindex="-1"></a><span class="co">#&gt;  [8,] -0.930966726  1.5052473 -0.52107294  0.2493926  0.93048540</span></span>
+<span id="cb47-11"><a href="r-programming.html#cb47-11" tabindex="-1"></a><span class="co">#&gt;  [9,]  0.539599035  0.3248639  0.07164841  1.1294633 -0.91517860</span></span>
+<span id="cb47-12"><a href="r-programming.html#cb47-12" tabindex="-1"></a><span class="co">#&gt; [10,] -0.421872955  1.1523627 -1.40432813  2.1424365  0.06376484</span></span></code></pre></div>
 <p>If you unsure about how to use the different *apply functions in <code>R</code>, we recommend to take a look at <a href="https://stackoverflow.com/questions/3505701/grouping-functions-tapply-by-aggregate-and-the-apply-family">this</a> nice Q/A on grouping functions and the *apply family on Stack Overflow, along with <a href="https://bookdown.org/rdpeng/rprogdatascience/loop-functions.html">Chapter 16</a> from the book <em>R Programming for Data Science</em> by Roger Peng about looping.</p></li>
 <li><p><code>sort(x)</code> : Sort or order a vector or factor into ascending or descending order.</p></li>
 <li><p><code>order(x)</code> : Get a permutation that rearranges <code>x</code> into ascending or descending order. In the case of ties in the first vector, values in the second are used to break the ties.</p>
@@ -637,12 +639,12 @@ Show me!
 <span id="cb50-9"><a href="r-programming.html#cb50-9" tabindex="-1"></a><span class="co">#&gt;   2 1 1</span></span></code></pre></div></li>
 <li><p><code>sample()</code> : Take a sample of the specified size from the elements of <code>x</code> either with or without replacement. Note <code>sample(x)</code> is a shortcut for <code>sample(1:x, size = x)</code>, when <code>x</code> has length one, is numeric and positive.</p>
 <div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="r-programming.html#cb51-1" tabindex="-1"></a><span class="fu">sample</span>(<span class="dv">10</span>)</span>
-<span id="cb51-2"><a href="r-programming.html#cb51-2" tabindex="-1"></a><span class="co">#&gt;  [1]  7  2  4  3 10  8  6  5  9  1</span></span>
+<span id="cb51-2"><a href="r-programming.html#cb51-2" tabindex="-1"></a><span class="co">#&gt;  [1]  1  4  8  2  5  9  6  3  7 10</span></span>
 <span id="cb51-3"><a href="r-programming.html#cb51-3" tabindex="-1"></a><span class="fu">sample</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">5</span>)</span>
-<span id="cb51-4"><a href="r-programming.html#cb51-4" tabindex="-1"></a><span class="co">#&gt; [1]  4  5  9 10  7</span></span>
+<span id="cb51-4"><a href="r-programming.html#cb51-4" tabindex="-1"></a><span class="co">#&gt; [1]  6  9  8 10  7</span></span>
 <span id="cb51-5"><a href="r-programming.html#cb51-5" tabindex="-1"></a><span class="fu">sample</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">50</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb51-6"><a href="r-programming.html#cb51-6" tabindex="-1"></a><span class="co">#&gt;  [1]  4  3  4  8  4  6  3 10  5  6  9  8  9  8  9 10  4  5  8  8  6  4  5  9  5  5  4 10</span></span>
-<span id="cb51-7"><a href="r-programming.html#cb51-7" tabindex="-1"></a><span class="co">#&gt; [29]  6  4  4  9 10  5  7 10  4  7  9  5  8  3  7  7  8 10  4 10  8  9</span></span></code></pre></div></li>
+<span id="cb51-6"><a href="r-programming.html#cb51-6" tabindex="-1"></a><span class="co">#&gt;  [1] 10  4  3  4  3  3 10  6  7  5  5  8 10  6 10 10 10  7  3  5  8  4  7  3  9  4  9  5</span></span>
+<span id="cb51-7"><a href="r-programming.html#cb51-7" tabindex="-1"></a><span class="co">#&gt; [29]  9  4  3  9  9  9  7  8  3  9  6  7  7  7  8  7  3  7  9  4  7 10</span></span></code></pre></div></li>
 <li><p><code>round(x)</code> : Round the value in the first argument to the specified number of decimal places. Rounding to a negative number of digits means rounding to a power of ten, i.e.</p>
 <div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="r-programming.html#cb52-1" tabindex="-1"></a><span class="fu">round</span>(<span class="fl">12.568</span>, <span class="sc">-</span><span class="dv">1</span>)</span>
 <span id="cb52-2"><a href="r-programming.html#cb52-2" tabindex="-1"></a><span class="co">#&gt; [1] 10</span></span>
@@ -685,12 +687,12 @@ Show me!
 <span id="cb55-18"><a href="r-programming.html#cb55-18" tabindex="-1"></a><span class="co">#&gt; 16    4    2</span></span></code></pre></div></li>
 <li><p><code>match()</code> : Return a vector of positions of (first) matches of the first argument in the second argument</p>
 <div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="r-programming.html#cb56-1" tabindex="-1"></a>(y <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">20</span><span class="sc">:</span><span class="dv">25</span>, <span class="dv">10</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb56-2"><a href="r-programming.html#cb56-2" tabindex="-1"></a><span class="co">#&gt;  [1] 23 22 25 23 24 21 21 22 21 21</span></span>
+<span id="cb56-2"><a href="r-programming.html#cb56-2" tabindex="-1"></a><span class="co">#&gt;  [1] 20 21 24 20 21 21 25 25 20 21</span></span>
 <span id="cb56-3"><a href="r-programming.html#cb56-3" tabindex="-1"></a><span class="fu">match</span>(y, <span class="dv">20</span><span class="sc">:</span><span class="dv">25</span>)</span>
-<span id="cb56-4"><a href="r-programming.html#cb56-4" tabindex="-1"></a><span class="co">#&gt;  [1] 4 3 6 4 5 2 2 3 2 2</span></span></code></pre></div></li>
+<span id="cb56-4"><a href="r-programming.html#cb56-4" tabindex="-1"></a><span class="co">#&gt;  [1] 1 2 5 1 2 2 6 6 1 2</span></span></code></pre></div></li>
 <li><p><code>%in%</code> : Return a logical vector indicating if there is a match or not for the left operand.</p>
 <div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="r-programming.html#cb57-1" tabindex="-1"></a>y <span class="sc">%in%</span> <span class="dv">20</span><span class="sc">:</span><span class="dv">22</span></span>
-<span id="cb57-2"><a href="r-programming.html#cb57-2" tabindex="-1"></a><span class="co">#&gt;  [1] FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE</span></span></code></pre></div></li>
+<span id="cb57-2"><a href="r-programming.html#cb57-2" tabindex="-1"></a><span class="co">#&gt;  [1]  TRUE  TRUE FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE</span></span></code></pre></div></li>
 <li><p><code>intersect(x, y)</code> : Perform set intersection (<span class="math inline">\(x \cap y\)</span>).</p>
 <div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="r-programming.html#cb58-1" tabindex="-1"></a><span class="fu">intersect</span>(<span class="fu">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;d&quot;</span>), <span class="fu">c</span>(<span class="st">&quot;c&quot;</span>, <span class="st">&quot;d&quot;</span>, <span class="st">&quot;e&quot;</span>))</span>
 <span id="cb58-2"><a href="r-programming.html#cb58-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;c&quot; &quot;d&quot;</span></span></code></pre></div></li>
@@ -765,22 +767,22 @@ Show me!
 <span id="cb70-2"><a href="r-programming.html#cb70-2" tabindex="-1"></a><span class="co">#&gt; Error in c(TRUE, FALSE, TRUE, TRUE) &amp;&amp; c(FALSE, TRUE, TRUE, FALSE): &#39;length = 4&#39; in coercion to &#39;logical(1)&#39;</span></span></code></pre></div></li>
 <li><p><code>ifelse(test, yes, no)</code> : Conditional element selection. <code>yes</code> will be evaluated if and only if any element of <code>test</code> is <code>TRUE</code>, and analogously for <code>no</code>.</p>
 <div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="r-programming.html#cb71-1" tabindex="-1"></a><span class="fu">round</span>(x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">10</span>), <span class="at">digits =</span> <span class="dv">5</span>)</span>
-<span id="cb71-2"><a href="r-programming.html#cb71-2" tabindex="-1"></a><span class="co">#&gt;  [1]  0.70391 -1.22172 -1.30070 -1.79076 -0.32089 -0.59589 -1.96258 -0.94710 -1.26792</span></span>
-<span id="cb71-3"><a href="r-programming.html#cb71-3" tabindex="-1"></a><span class="co">#&gt; [10]  0.33669</span></span>
+<span id="cb71-2"><a href="r-programming.html#cb71-2" tabindex="-1"></a><span class="co">#&gt;  [1] -0.23747 -1.03997  1.63676 -1.18127 -0.40775 -0.04172  0.02707  2.15092 -1.61145</span></span>
+<span id="cb71-3"><a href="r-programming.html#cb71-3" tabindex="-1"></a><span class="co">#&gt; [10]  0.95478</span></span>
 <span id="cb71-4"><a href="r-programming.html#cb71-4" tabindex="-1"></a><span class="fu">ifelse</span>(x <span class="sc">&gt;</span> <span class="dv">0</span>, x, <span class="sc">-</span>x)</span>
-<span id="cb71-5"><a href="r-programming.html#cb71-5" tabindex="-1"></a><span class="co">#&gt;  [1] 0.7039097 1.2217232 1.3007019 1.7907566 0.3208909 0.5958931 1.9625804 0.9471048</span></span>
-<span id="cb71-6"><a href="r-programming.html#cb71-6" tabindex="-1"></a><span class="co">#&gt;  [9] 1.2679200 0.3366922</span></span></code></pre></div>
+<span id="cb71-5"><a href="r-programming.html#cb71-5" tabindex="-1"></a><span class="co">#&gt;  [1] 0.23746919 1.03997452 1.63676301 1.18126640 0.40774636 0.04171858 0.02707026</span></span>
+<span id="cb71-6"><a href="r-programming.html#cb71-6" tabindex="-1"></a><span class="co">#&gt;  [8] 2.15092091 1.61144849 0.95477716</span></span></code></pre></div>
 <p><code>ifelse()</code> can be used to handle special cases in a vectorized way, or it can be used to construct a vector by doing element-wise comparisons of two vectors. <code>ifelse()</code> is <strong>NOT</strong> a shortcut for an if-else statement! <code>ifelse()</code> always returns a vector of the same length and attributes as the condition. Hence, if the length of the input vector is one, <code>ifelse()</code> only returns the first element of the returning vector:</p>
 <div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="r-programming.html#cb72-1" tabindex="-1"></a><span class="fu">ifelse</span>(<span class="cn">FALSE</span>, <span class="dv">0</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)</span>
 <span id="cb72-2"><a href="r-programming.html#cb72-2" tabindex="-1"></a><span class="co">#&gt; [1] 1</span></span></code></pre></div>
 <p>If the input is of type <code>integer</code>, <code>ifelse()</code> returns a vector of type integer:</p>
 <div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="r-programming.html#cb73-1" tabindex="-1"></a><span class="fu">ifelse</span>(<span class="dv">1</span>, <span class="fu">Sys.Date</span>(), <span class="dv">0</span>)</span>
-<span id="cb73-2"><a href="r-programming.html#cb73-2" tabindex="-1"></a><span class="co">#&gt; [1] 19946</span></span></code></pre></div>
+<span id="cb73-2"><a href="r-programming.html#cb73-2" tabindex="-1"></a><span class="co">#&gt; [1] 19951</span></span></code></pre></div>
 <p>If you want a more compact way of writing a standard if-else statement, you can use the function `<code>if</code>()`:</p>
 <div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="r-programming.html#cb74-1" tabindex="-1"></a><span class="st">`</span><span class="at">if</span><span class="st">`</span>(<span class="cn">FALSE</span>, <span class="dv">0</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)</span>
 <span id="cb74-2"><a href="r-programming.html#cb74-2" tabindex="-1"></a><span class="co">#&gt; [1] 1 2 3 4 5</span></span>
 <span id="cb74-3"><a href="r-programming.html#cb74-3" tabindex="-1"></a><span class="st">`</span><span class="at">if</span><span class="st">`</span>(<span class="cn">TRUE</span>, <span class="fu">Sys.Date</span>(), <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)</span>
-<span id="cb74-4"><a href="r-programming.html#cb74-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;2024-08-11&quot;</span></span></code></pre></div>
+<span id="cb74-4"><a href="r-programming.html#cb74-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;2024-08-16&quot;</span></span></code></pre></div>
 <p>In simple cases, however, the standard if-else statement can also be written very compact:</p>
 <div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="r-programming.html#cb75-1" tabindex="-1"></a><span class="cf">if</span> (<span class="cn">FALSE</span>) <span class="dv">0</span> <span class="cf">else</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span></span>
 <span id="cb75-2"><a href="r-programming.html#cb75-2" tabindex="-1"></a><span class="co">#&gt; [1] 1 2 3 4 5</span></span></code></pre></div>
@@ -963,8 +965,8 @@ blog post <a href="https://privefl.github.io/blog/On-the-ifelse-function/"><em>O
 <span id="cb78-4"><a href="r-programming.html#cb78-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;a1&quot;  &quot;a2&quot;  &quot;a10&quot;</span></span></code></pre></div></li>
 <li><p><code>dplyr::case_when()</code> : Vectorize multiple <code>ifelse()</code> statements. Each case is evaluated sequentially and the first match for each element determines the corresponding value in the output vector.</p>
 <div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="r-programming.html#cb79-1" tabindex="-1"></a><span class="fu">round</span>(x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">runif</span>(<span class="dv">20</span>, <span class="at">min =</span> <span class="fl">15.0</span>, <span class="at">max =</span> <span class="fl">50.0</span>), <span class="cn">NA</span>), <span class="at">digits =</span> <span class="dv">4</span>)</span>
-<span id="cb79-2"><a href="r-programming.html#cb79-2" tabindex="-1"></a><span class="co">#&gt;  [1] 41.8143 41.4457 47.5710 23.6829 43.1721 37.6931 25.2496 41.4163 31.6804 38.3665</span></span>
-<span id="cb79-3"><a href="r-programming.html#cb79-3" tabindex="-1"></a><span class="co">#&gt; [11] 40.8478 26.4275 15.7107 48.0819 29.2380 26.7016 38.6566 38.7260 43.1882 40.2686</span></span>
+<span id="cb79-2"><a href="r-programming.html#cb79-2" tabindex="-1"></a><span class="co">#&gt;  [1] 42.0096 42.2493 46.7882 44.2116 38.3425 49.0736 18.3869 15.7277 47.8326 40.7429</span></span>
+<span id="cb79-3"><a href="r-programming.html#cb79-3" tabindex="-1"></a><span class="co">#&gt; [11] 20.7587 31.9946 21.0563 19.9315 35.6019 34.4753 37.6315 27.8426 43.6784 21.2277</span></span>
 <span id="cb79-4"><a href="r-programming.html#cb79-4" tabindex="-1"></a><span class="co">#&gt; [21]      NA</span></span>
 <span id="cb79-5"><a href="r-programming.html#cb79-5" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">case_when</span>(x <span class="sc">&lt;</span> <span class="fl">16.0</span> <span class="sc">~</span> <span class="st">&quot;Severely Underweight&quot;</span>,</span>
 <span id="cb79-6"><a href="r-programming.html#cb79-6" tabindex="-1"></a>  x <span class="sc">&lt;=</span> <span class="fl">18.4</span> <span class="sc">~</span> <span class="st">&quot;Underweight&quot;</span>,</span>
@@ -976,12 +978,12 @@ blog post <a href="https://privefl.github.io/blog/On-the-ifelse-function/"><em>O
 <span id="cb79-12"><a href="r-programming.html#cb79-12" tabindex="-1"></a>  <span class="at">.default =</span> <span class="fu">as.character</span>(<span class="cn">NA</span>)</span>
 <span id="cb79-13"><a href="r-programming.html#cb79-13" tabindex="-1"></a>)</span>
 <span id="cb79-14"><a href="r-programming.html#cb79-14" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;Morbidly Obese&quot;       &quot;Morbidly Obese&quot;       &quot;Morbidly Obese&quot;      </span></span>
-<span id="cb79-15"><a href="r-programming.html#cb79-15" tabindex="-1"></a><span class="co">#&gt;  [4] &quot;Normal&quot;               &quot;Morbidly Obese&quot;       &quot;Severely Obese&quot;      </span></span>
-<span id="cb79-16"><a href="r-programming.html#cb79-16" tabindex="-1"></a><span class="co">#&gt;  [7] &quot;Overweight&quot;           &quot;Morbidly Obese&quot;       &quot;Moderate Obese&quot;      </span></span>
-<span id="cb79-17"><a href="r-programming.html#cb79-17" tabindex="-1"></a><span class="co">#&gt; [10] &quot;Severely Obese&quot;       &quot;Morbidly Obese&quot;       &quot;Overweight&quot;          </span></span>
-<span id="cb79-18"><a href="r-programming.html#cb79-18" tabindex="-1"></a><span class="co">#&gt; [13] &quot;Severely Underweight&quot; &quot;Morbidly Obese&quot;       &quot;Overweight&quot;          </span></span>
-<span id="cb79-19"><a href="r-programming.html#cb79-19" tabindex="-1"></a><span class="co">#&gt; [16] &quot;Overweight&quot;           &quot;Severely Obese&quot;       &quot;Severely Obese&quot;      </span></span>
-<span id="cb79-20"><a href="r-programming.html#cb79-20" tabindex="-1"></a><span class="co">#&gt; [19] &quot;Morbidly Obese&quot;       &quot;Morbidly Obese&quot;       NA</span></span></code></pre></div></li>
+<span id="cb79-15"><a href="r-programming.html#cb79-15" tabindex="-1"></a><span class="co">#&gt;  [4] &quot;Morbidly Obese&quot;       &quot;Severely Obese&quot;       &quot;Morbidly Obese&quot;      </span></span>
+<span id="cb79-16"><a href="r-programming.html#cb79-16" tabindex="-1"></a><span class="co">#&gt;  [7] &quot;Underweight&quot;          &quot;Severely Underweight&quot; &quot;Morbidly Obese&quot;      </span></span>
+<span id="cb79-17"><a href="r-programming.html#cb79-17" tabindex="-1"></a><span class="co">#&gt; [10] &quot;Morbidly Obese&quot;       &quot;Normal&quot;               &quot;Moderate Obese&quot;      </span></span>
+<span id="cb79-18"><a href="r-programming.html#cb79-18" tabindex="-1"></a><span class="co">#&gt; [13] &quot;Normal&quot;               &quot;Normal&quot;               &quot;Severely Obese&quot;      </span></span>
+<span id="cb79-19"><a href="r-programming.html#cb79-19" tabindex="-1"></a><span class="co">#&gt; [16] &quot;Moderate Obese&quot;       &quot;Severely Obese&quot;       &quot;Overweight&quot;          </span></span>
+<span id="cb79-20"><a href="r-programming.html#cb79-20" tabindex="-1"></a><span class="co">#&gt; [19] &quot;Morbidly Obese&quot;       &quot;Normal&quot;               NA</span></span></code></pre></div></li>
 </ul>
 </div>
 <div id="exercises" class="section level3 unnumbered hasAnchor">
@@ -990,13 +992,13 @@ blog post <a href="https://privefl.github.io/blog/On-the-ifelse-function/"><em>O
 <li><p>Use <code>sample()</code>, <code>rep_len()</code> and <code>split()</code> to make a function that randomly splits some indices in a list of <code>K</code> groups of indices (like for cross-validation). [Which are the special cases that you should consider?]</p>
 <div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="r-programming.html#cb80-1" tabindex="-1"></a>advr38pkg<span class="sc">::</span><span class="fu">split_ind</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">40</span>, <span class="dv">3</span>)</span></code></pre></div>
 <pre><code>#&gt; $`1`
-#&gt;  [1] 12 13 14 15 16 17 18 22 28 29 30 32 38 40
+#&gt;  [1]  1  2  3  4  9 11 13 14 15 19 31 36 39 40
 #&gt; 
 #&gt; $`2`
-#&gt;  [1]  4  5  6  7 10 11 19 24 26 27 31 34 37
+#&gt;  [1]  6  7  8 10 12 17 20 23 24 26 32 34 38
 #&gt; 
 #&gt; $`3`
-#&gt;  [1]  1  2  3  8  9 20 21 23 25 33 35 36 39</code></pre></li>
+#&gt;  [1]  5 16 18 21 22 25 27 28 29 30 33 35 37</code></pre></li>
 <li><p>Use <code>replicate()</code> and <code>sample()</code> to get a 95% confidence interval (using bootstrapping) for the mean of the following vector:</p>
 <div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="r-programming.html#cb82-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
 <span id="cb82-2"><a href="r-programming.html#cb82-2" tabindex="-1"></a>(x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">10</span>))</span></code></pre></div>
@@ -1371,12 +1373,12 @@ We want to note, however, that you can define your own attributes using the func
 <span id="cb116-12"><a href="r-programming.html#cb116-12" tabindex="-1"></a><span class="co">#&gt; [1] &quot;a&quot; &quot;b&quot; &quot;c&quot;</span></span></code></pre></div>
 <p>If you remove the only attribute (<code>class</code>) from a date vector, the result is a numeric vector representing the number of days since 1970-01-01</p>
 <div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="r-programming.html#cb117-1" tabindex="-1"></a>(today <span class="ot">&lt;-</span> <span class="fu">Sys.Date</span>())</span>
-<span id="cb117-2"><a href="r-programming.html#cb117-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;2024-08-11&quot;</span></span>
+<span id="cb117-2"><a href="r-programming.html#cb117-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;2024-08-16&quot;</span></span>
 <span id="cb117-3"><a href="r-programming.html#cb117-3" tabindex="-1"></a><span class="fu">attributes</span>(today)</span>
 <span id="cb117-4"><a href="r-programming.html#cb117-4" tabindex="-1"></a><span class="co">#&gt; $class</span></span>
 <span id="cb117-5"><a href="r-programming.html#cb117-5" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Date&quot;</span></span>
 <span id="cb117-6"><a href="r-programming.html#cb117-6" tabindex="-1"></a><span class="fu">unclass</span>(today)</span>
-<span id="cb117-7"><a href="r-programming.html#cb117-7" tabindex="-1"></a><span class="co">#&gt; [1] 19946</span></span></code></pre></div>
+<span id="cb117-7"><a href="r-programming.html#cb117-7" tabindex="-1"></a><span class="co">#&gt; [1] 19951</span></span></code></pre></div>
 <div id="exercise-1" class="section level4 unnumbered hasAnchor">
 <h4>Exercise<a href="r-programming.html#exercise-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <ol style="list-style-type: decimal">
@@ -1719,7 +1721,7 @@ In short, <code>R</code>’s lexical scoping follows these four primary rules;</
 <h2><span class="header-section-number">3.5</span> Summary<a href="r-programming.html#summary-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ul>
 <li>Real numbers are represented as floating-point numbers, which can lead to floating-point errors. Use <code>all.equal()</code> or <code>dplyr::near()</code> instead of <code>==</code> to test if two objects are equal.</li>
-<li><code>...</code> is a special argument that allows functions to take any number if arguments. <code>...</code> is greedy and any misspelled or non-existing arguments will be passed on without raising an error.</li>
+<li><code>...</code> is a special argument that allows functions to take any number of arguments. <code>...</code> is greedy and any misspelled or non-existing arguments will be passed on without raising an error.</li>
 <li>The function <code>sample()</code> can be used with a vector, a single number, or even a real number. Internally, <code>sample()</code> turns any (real) number <code>x</code> into a sequence starting with 1 and increasing with 1 until the upper limit <code>x</code> is reached.</li>
 <li>The colon operator <code>from:to</code> can be used to generate sequences staring from <code>from</code> and ending with <code>to</code> in steps of 1 or -1 (similar to <code>seq()</code>).</li>
 <li>All <code>R</code> objects have a type.</li>

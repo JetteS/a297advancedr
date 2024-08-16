@@ -351,7 +351,7 @@ And to learn more about what pages should be included on your website, read [thi
 
 ## Summary
 
-* R Markdown is a file format for making reproducible, dynamics documents with `R`.
+* R Markdown is a file format for making reproducible, dynamic documents with `R`.
 * An R Markdown document is written in Markdown and contains plain text and embedded `R` code along with results.
 * The typical extension for an R Markdown file is *.Rmd*.
 * To open a new R Markdown document, go to File -> New File -> R Markdown... or click on <img src="images/blankFileIcon.png" style="display:inline-block; margin:0"/> in the upper-left corner of the RStudio menu and select <img src="images/newRMarkdownDoc.png" style="display:inline-block; margin:0"/> R Markdown... . R Studio will launch a wizard that you can use to pre-populate the file with useful content. 
