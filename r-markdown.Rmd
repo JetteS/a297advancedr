@@ -144,7 +144,7 @@ Following the metadata is the body of the R Markdown file. The second important 
 You can insert a chunk in three different ways:
 
 - By manually typing the chunk delimiters  ` ```{r} ` and ` ``` `
-- By clicking the insert button icon <img src="images/insertChunk.png" style="display:inline-block; margin:0"/> in the editor toolbar at the top of the **Source pane**
+- By clicking the insert chunk icon <img src="images/insertChunk.png" style="display:inline-block; margin:0"/> in the editor toolbar at the top of the **Source pane**
 - or by using the keyboard shortcut *Ctrl+Alt+I* / *Command+Option+I*.
 
 Even though you are working within an R Markdown document, you can still execute current line/selection of code in a code chunk using the keyboard shortcut  *Ctrl+Enter* / *Command+Return*. If you want to run all code in a chunk, you can click <img src="images/executeCurrentChunk.png" style="display:inline-block; margin:0"/> in the upper-right corner of the code chunk or use the shortcut *Ctrl+Shift+Enter* / *Command+Shift+Return*. 

@@ -22,7 +22,7 @@ knitr::include_graphics("images/tt_logo.jpg")
 
 How it works:
 
-1. The dataset comes from a *source article* and it is made available on Mondays.
+1. The data set comes from a *source article* and it is made available on Mondays.
 
 2. People then play with the data set using the tidyverse, explore things that they think are interesting, and/or try to recreate the source article plots/results.
 
