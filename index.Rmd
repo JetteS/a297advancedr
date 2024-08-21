@@ -9,8 +9,8 @@ bibliography: [book.bib]
 biblio-style: apalike
 link-citations: yes
 description: "This document contains all the materials used in connection to the PhD course A297 Advanced R held at the Graduate School of Health, Aarhus University, Denmark. The materials in this document are modifications of the materials presented in advr28book by Florian Privé."
-github-repo: "JetteS/advr38book"
-url: 'https\://JetteS.github.io/advr38book/'
+github-repo: "JetteS/a297advancedr"
+url: 'https\://JetteS.github.io/a297advancedr/'
 cover-image: "images/new_hexsticker.png"
 ---
 
