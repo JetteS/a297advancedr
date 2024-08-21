@@ -1,179 +1,124 @@
-# Project
+# `TidyTuesday`
 
-Either
+```{r, include=FALSE}
+WORDS_TO_IGNORE <- c("DS", "LinkedIn", "tidyr", "Kaupp's", "LEGO", "Eurovision", "tornados", "BAM", "Georgios", "Karamanis", "ramen", "Sprenger's", "Torsten")
 
-- have some idea about new functions you want to create and share, and make it as a new R package,
-
-- explore, visualize, and analyze some data (cf. hereinafter).
-
-
-## What is Tidy Tuesday?
-
-```{r, fig.align="center", out.width="60%", echo=FALSE}
-knitr::include_graphics("images/tt_logo.jpg")
+source("knitr-options.R")
+source("spelling-check.R")
 ```
 
-- A weekly data project from [the R4DS community](https://www.rfordatasci.com/).
-
-- The aim is to understand how to summarize and arrange data to make meaningful charts with `ggplot2`, `tidyr`, `dplyr`, and other tools in the `tidyverse` ecosystem.
-
-- Safe and supportive space for individuals to practice their **wrangling and data visualization** skills independent of drawing conclusions.
-
-
-How it works:
-
-1. The data set comes from a *source article* and it is made available on Mondays.
-
-2. People then play with the data set using the tidyverse, explore things that they think are interesting, and/or try to recreate the source article plots/results.
-
-3. And share their own version on Twitter (with [the hashtag #TidyTuesday](https://twitter.com/search?q=%23tidytuesday&src=typed_query)).
-
-
-## Tidy Thursday
-
-Our own mini-version of Tidy Tuesday!
-
-1. Join in teams of 2 (or 3).
-
-1. Choose a dataset from the ones provided.
-
-1. Come up with an interesting topic to visualize (or recreate an existing one).
-
-1. Apply things you have learned in this course, and try to learn new things with our help and Google's help.
-
-1. Share the resulting plot(s) and the code with the rest on Friday with a short presentation talking about challenges and conclusions from the plot.
-
-### Choose a dataset
-
-Install the {tidytuesdayR} package:
-
-```{r eval=FALSE, tidy=FALSE}
-install.packages("tidytuesdayR")
+```{r, echo=FALSE, fig.align='center', out.width='60%'}
+knitr::include_graphics("images/tidy_tuesday_logo.jpg")
 ```
 
-Some interesting datasets:
+[`TidyTuesday`](https://github.com/rfordatascience/tidytuesday?tab=readme-ov-file) is a weekly social data project from the [Data Science Learning Community](https://dslc.io/) (previously called _R for data science (R4DS) Online Learning Community_). The aim of this activity is for learners and mentors to gather and work through the book [_R for Data Science_](https://r4ds.hadley.nz/) by Hadley Wickham; By doing so, help R learners understand how to summarize and arrange real-world data to make meaningful charts with [ggplot2](https://ggplot2.tidyverse.org/), [tidyr](https://tidyr.tidyverse.org/), [dplyr](https://dplyr.tidyverse.org/) and other tools from the [tidyverse](https://www.tidyverse.org/). 
+`TidyTuesday` started as a podcast (you can find the podcast [online](https://www.tidytuesday.com/)) and has now become a safe and supportive space for individuals to practice their wrangling and data visualization skills independent of drawing conclusions.
 
-- [Olympic medals](https://github.com/rfordatascience/tidytuesday/blob/master/data/2021/2021-07-27/readme.md)
+Every Monday morning, a data set is posted to social media (on [Mastodon](https://fosstodon.org/@jonthegeek), [LinkedIn](https://www.linkedin.com/in/jonthegeek/) and [GitHub](https://github.com/rfordatascience/tidytuesday/blob/master/README.md)). 
+The data set always comes from some source article, which means that participants learn to work with real-world data.
+When the data has been posted to social media, all participants have time to explore the data, create visualizations, a model, a shiny app or some other data-science related output. In fact, participants do not have to use R; data-science-related output can be created in any programming language.
+Finally, participants can share their output and the code that they used to generate it on social media with the hash tag `#TidyTuesday`. 
 
-```{r eval=FALSE, tidy=FALSE}
-data <- tidytuesdayR::tt_load('2021-07-27')[["olympics"]]
+The first `TidyTuesday` data project was released in April 2018, and included data on US Tuition Costs. Since then, the Data Science Learning Community has posted more than 300 data sets retrieved from a variety of sources and covering many different topics; From [Star Trek Timelines](https://github.com/rfordatascience/tidytuesday/tree/master/data/2022/2022-12-27), to [CHIP data](https://github.com/rfordatascience/tidytuesday/tree/master/data/2022/2022-08-23), [UFO sightings](https://github.com/rfordatascience/tidytuesday/blob/master/data/2023/2023-06-20/readme.md), [Superbowl commercials](https://github.com/rfordatascience/tidytuesday/blob/master/data/2021/2021-03-02/readme.md), [Groundhog predictions](https://github.com/rfordatascience/tidytuesday/blob/master/data/2024/2024-01-30/readme.md), and many more. 
+You can see the full list on the [`TidyTuesday` GitHub repository](https://github.com/rfordatascience/tidytuesday).
+
+## Loading `TidyTuesday` data 
+
+You can access any `TidyTuesday` data set with the package `tidytuesdayR`. `tidytuesdayR` includes several functions:
+
+-`tt_available` : Lists all data sets ever released by `TidyTuesday`
+- `last_tuesday` : Find the most recent `TidyTuesday` date
+- `tt_download` : Download one or more `TidyTuesday` files
+- `tt_load` : Load `TidyTuesday` data for a specified date from GitHub.
+
+For example, you can load the `TidyTuesday` data from 14 January 2020 using
+
+```{r, tidy='styler', collapse=TRUE, eval=FALSE}
+tidytuesdayR::tt_load("2020-01-14")
 ```
 
-- [Netflix titles](https://github.com/rfordatascience/tidytuesday/blob/master/data/2021/2021-04-20/readme.md)
+If the data consists of more than one file, you can decide which files to download using the argument `download_files`:
 
-```{r eval=FALSE, tidy=FALSE}
-data <- tidytuesdayR::tt_load('2021-04-20')[["netflix_titles"]]
+```{r, tidy='styler', collapse=TRUE, eval=FALSE}
+tidytuesdayR::tt_load("2020-05-05", download_files = "villagers")
 ```
 
-- [Spotify songs](https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-01-21/readme.md)
+## Inspiration {.unnumbered}
 
-```{r eval=FALSE, tidy=FALSE}
-data <- tidytuesdayR::tt_load('2020-01-21')[["spotify_songs"]]
-```
+You can find inspiration from previous `TidyTuesday` projects online. Some examples are shown below:
 
-If you do not like any of these, you can also choose from all the previous tidy Tuesday datasets [here](https://github.com/rfordatascience/tidytuesday#datasets). 
+- Jake Kaupp's contribution on Chicago Bird Collisions: 
+<a href="https://github.com/jkaupp/tidytuesdays/tree/master/2019/week18">
+    ```{r, echo=FALSE, fig.align='center', out.width='60%'}
+  knitr::include_graphics("images/tidy_tuesday_jake_kaupp.png")
+    ```
+</a>
 
+- Georgios Karamanis' visualization of instant ramen reviews: 
+<a href="https://github.com/gkaramanis/tidytuesday/tree/master/2019/2019-week-23">
+    ```{r, echo=FALSE, fig.align='center', out.width='60%'}
+  knitr::include_graphics("images/tidy_tuesday_georgios_karamanis_ramen.png")
+    ```
+</a>
 
-### Visualize the data
+- Georgios Karamanis' histogram of UFO sightings: 
+<a href="https://github.com/gkaramanis/tidytuesday/tree/master/2019/2019-week-26">
+    ```{r, echo=FALSE, fig.align='center', out.width='60%'}
+  knitr::include_graphics("images/tidy_tuesday_georgios_karamanis_ufo.png")
+    ```
+</a>
 
-Come up with a question, or an interesting thing to learn from the data.
+- Dr. Torsten Sprenger's visualizations of the gender bias in scientific publishing: 
+<a href="https://github.com/spren9er/tidytuesday/blob/master/tidytuesday_201916_new_economist.r">
+    ```{r, echo=FALSE, fig.align='center', out.width='60%'}
+  knitr::include_graphics("images/tidy_tuesday_torsten_sprenger.png")
+    ```
+</a>
 
-You can get inspired by looking at other participants on Twitter:
+## Advanced R Project - `TidyFriday`
 
-- Shiny app with a compilation of tweets ordered by likes [TidyTuesdayRocks](https://nsgrantham.shinyapps.io/tidytuesdayrocks/)
+Let's make our own mini version of `TidyTuesday`. As you will present your results on Friday, we can call this project `TidyFriday` `r emo::ji("wink")`.
 
-- Search for #TidyTuesday + dataset_name on Twitter.
+1. Work together in teams of 2 (or 3).
+1. Choose a data set from the list of available `TidyTuesday` data sets (`tidytuesdayR::tt_available()`).
+1. Come up with a question or find interesting aspects to visualize. You can also recreate an existing visualization.
+1. Apply the functions you have learned in this course and try to learn new things to create an interesting plot.
+1. Share the resulting plot(s) and the code on GitHub.
 
-Remember that the code is always available at the author's github page.
+Friday afternoon, you will give a short presentation where you talk about challenges and conclusions from the plot.
 
+### Presentation {.unnumbered}
 
-### Compilation of tweets
+Make a short (5-10 min) presentation. You can simply make an HTML file from R Markdown and upload it to GitHub. The HTML file can then be previewed on <http://htmlpreview.github.io/>. The presentation should include:
 
-```{r, echo=FALSE}
-knitr::include_app("https://nsgrantham.shinyapps.io/tidytuesdayrocks/")
-```
+- A short introduction to the data set and the variables you chose to visualize
+- Your results and a discussion about the trends/patterns in the data
+- If you chose to recreate a visualization, comment on the quality of the plot or potential problems
+- The generative code and comments on the steps and transformations you applied to the data
+- Potential other tidyverse functions or packages that were particularly useful
 
+### Examples {.unnumbered}
 
-### Example
+Below, you can find some examples from previous years:
 
-Someone tried the recreate a plot using the **Netflix dataset**:
+- [Alcohol Consumption](presentations/alcohol-consumption.html)
 
-```{r, echo=FALSE, eval=FALSE}
-tweetrmd::tweet_embed("https://twitter.com/marieke_k_jones/status/1384560097821614081")
-```
-
-<br>
-
-Clara's (quick) version:
-
-```{r message=FALSE, warning=FALSE}
-library(tidyverse)
-netflix_titles <- tidytuesdayR::tt_load('2021-04-20')[["netflix_titles"]]
-```
-
-```{r, message=FALSE, warning=FALSE, fig.align='center', fig.width=10}
-netflix_titles %>%
-  filter(type == "Movie") %>%
-  mutate(duration = as.numeric(str_extract(duration, "(\\d)+")),
-         cat = map_chr(listed_in, ~str_split(.x, ", ")[[1]][1]),
-         cat = case_when(
-    cat %in% c("Horror Movies", "Thrillers") ~ "Horror Movies & Thrillers",
-    TRUE ~ cat)) %>%
-  group_by(release_year, cat) %>%
-  summarise(mean_duration = mean(duration)) %>%
-  filter(cat %in% c("Action & Adventure", "Children & Family Movies",
-                    "Comedies", "Documentaries", "Dramas", 
-                    "Horror Movies & Thrillers")) %>%
-  ggplot(aes(x = release_year, y = mean_duration, color = cat)) +
-  geom_line() +
-  scale_x_continuous(limits = c(1980, 2020)) +
-  scale_y_continuous(limits = c(50, 160), breaks = seq(50,150, 25)) +
-  facet_wrap(~cat) +
-  theme_minimal() + 
-  theme(text = element_text(size = 14),
-        legend.position = "none", 
-        axis.title.x = element_blank()) +
-  labs(title = "Children's movies and Dramas decrease in duration over time", 
-       y = "Average movie duration (min)")
-```
-
-
-### Presentation
-
-Make a short (5-10 min) presentation; you can simply make an HTML from RMarkdown, push to GitHub and we can preview it on <http://htmlpreview.github.io/>.
-
-What you can present:
-
-- Introduce the data set and the variables you have chosen to visualize.
-
-- Show the resulting plot and discuss the trends/patterns in the data.
-
-- If you chose to recreate a visualization from Twitter, comment on the quality of the plot or potential problems.
-
-- Show the generative code and comment on the steps and transformations you have applied to the data.
-
-- Did you find a set of `tidyverse` functions particularly useful? Did you discover another useful package?
-
-Some examples from students in 2022-2023:
-
-- [alcohol consumption](presentations/alcohol-consumption.html)
-
-- [lego sets](presentations/lego.html)
+- [LEGO sets](presentations/lego.html)
 
 - [F1 winners](presentations/f1.html)
 
-- [baby names](presentations/baby-names.html)
+- [Baby Names](presentations/baby-names.html)
 
 - [UFO sightings](presentations/UFO_Sightings.html)
 
-- [tornados](presentations/tornados.html)
+- [Tornados](presentations/tornados.html)
 
-- [wealth inequalities in the USA](presentations/wealth-inequalities.html)
+- [Wealth Inequalities in the USA](presentations/wealth-inequalities.html)
 
 - [Eurovision](presentations/TidyTuesday_Eurovision.html)
 
-- [horror movies](presentations/Horror-movies.docx)
+- [Horror Movies](presentations/Horror-movies.docx)
 
-- [a package for clinical data](presentations/package-stRoke.html)
+- [A Package for Clinical Data](presentations/package-stRoke.html)
 
-- [a package to read BAM files](presentations/package_banalyzer.html)
+- [A Package to read BAM files](presentations/package_banalyzer.html)

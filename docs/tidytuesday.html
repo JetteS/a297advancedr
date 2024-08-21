@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>A297 Advanced R</title>
+  <title>Chapter 8 TidyTuesday | A297 Advanced R</title>
   <meta name="description" content="This document contains all the materials used in connection to the PhD course A297 Advanced R held at the Graduate School of Health, Aarhus University, Denmark. The materials in this document are modifications of the materials presented in advr28book by Florian Privé." />
   <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="A297 Advanced R" />
+  <meta property="og:title" content="Chapter 8 TidyTuesday | A297 Advanced R" />
   <meta property="og:type" content="book" />
   <meta property="og:image" content="https://JetteS.github.io/a297advancedr//images/new_hexsticker.png" />
   <meta property="og:description" content="This document contains all the materials used in connection to the PhD course A297 Advanced R held at the Graduate School of Health, Aarhus University, Denmark. The materials in this document are modifications of the materials presented in advr28book by Florian Privé." />
   <meta name="github-repo" content="JetteS/a297advancedr" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="A297 Advanced R" />
+  <meta name="twitter:title" content="Chapter 8 TidyTuesday | A297 Advanced R" />
   
   <meta name="twitter:description" content="This document contains all the materials used in connection to the PhD course A297 Advanced R held at the Graduate School of Health, Aarhus University, Denmark. The materials in this document are modifications of the materials presented in advr28book by Florian Privé." />
   <meta name="twitter:image" content="https://JetteS.github.io/a297advancedr//images/new_hexsticker.png" />
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
+<link rel="prev" href="packages.html"/>
 
-<link rel="next" href="introduction.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -328,53 +328,91 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">A297 Advanced R</h1>
-<h2 class="subtitle"><em>PhD course offered by the Graduate School of Health, Aarhus University</em></h2>
-<p class="author"><em>Jette Steinbach</em></p>
-<p class="date"><em>2024-08-21</em></p>
+<div id="tidytuesday" class="section level1 hasAnchor" number="8">
+<h1><span class="header-section-number">Chapter 8</span> <code>TidyTuesday</code><a href="tidytuesday.html#tidytuesday" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p><img src="images/tidy_tuesday_logo.jpg" width="60%" style="display: block; margin: auto;" /></p>
+<p><a href="https://github.com/rfordatascience/tidytuesday?tab=readme-ov-file"><code>TidyTuesday</code></a> is a weekly social data project from the <a href="https://dslc.io/">Data Science Learning Community</a> (previously called <em>R for data science (R4DS) Online Learning Community</em>). The aim of this activity is for learners and mentors to gather and work through the book <a href="https://r4ds.hadley.nz/"><em>R for Data Science</em></a> by Hadley Wickham; By doing so, help R learners understand how to summarize and arrange real-world data to make meaningful charts with <a href="https://ggplot2.tidyverse.org/">ggplot2</a>, <a href="https://tidyr.tidyverse.org/">tidyr</a>, <a href="https://dplyr.tidyverse.org/">dplyr</a> and other tools from the <a href="https://www.tidyverse.org/">tidyverse</a>.
+<code>TidyTuesday</code> started as a podcast (you can find the podcast <a href="https://www.tidytuesday.com/">online</a>) and has now become a safe and supportive space for individuals to practice their wrangling and data visualization skills independent of drawing conclusions.</p>
+<p>Every Monday morning, a data set is posted to social media (on <a href="https://fosstodon.org/@jonthegeek">Mastodon</a>, <a href="https://www.linkedin.com/in/jonthegeek/">LinkedIn</a> and <a href="https://github.com/rfordatascience/tidytuesday/blob/master/README.md">GitHub</a>).
+The data set always comes from some source article, which means that participants learn to work with real-world data.
+When the data has been posted to social media, all participants have time to explore the data, create visualizations, a model, a shiny app or some other data-science related output. In fact, participants do not have to use R; data-science-related output can be created in any programming language.
+Finally, participants can share their output and the code that they used to generate it on social media with the hash tag <code>#TidyTuesday</code>.</p>
+<p>The first <code>TidyTuesday</code> data project was released in April 2018, and included data on US Tuition Costs. Since then, the Data Science Learning Community has posted more than 300 data sets retrieved from a variety of sources and covering many different topics; From <a href="https://github.com/rfordatascience/tidytuesday/tree/master/data/2022/2022-12-27">Star Trek Timelines</a>, to <a href="https://github.com/rfordatascience/tidytuesday/tree/master/data/2022/2022-08-23">CHIP data</a>, <a href="https://github.com/rfordatascience/tidytuesday/blob/master/data/2023/2023-06-20/readme.md">UFO sightings</a>, <a href="https://github.com/rfordatascience/tidytuesday/blob/master/data/2021/2021-03-02/readme.md">Superbowl commercials</a>, <a href="https://github.com/rfordatascience/tidytuesday/blob/master/data/2024/2024-01-30/readme.md">Groundhog predictions</a>, and many more.
+You can see the full list on the <a href="https://github.com/rfordatascience/tidytuesday"><code>TidyTuesday</code> GitHub repository</a>.</p>
+<div id="loading-tidytuesday-data" class="section level2 hasAnchor" number="8.1">
+<h2><span class="header-section-number">8.1</span> Loading <code>TidyTuesday</code> data<a href="tidytuesday.html#loading-tidytuesday-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>You can access any <code>TidyTuesday</code> data set with the package <code>tidytuesdayR</code>. <code>tidytuesdayR</code> includes several functions:</p>
+<p>-<code>tt_available</code> : Lists all data sets ever released by <code>TidyTuesday</code>
+- <code>last_tuesday</code> : Find the most recent <code>TidyTuesday</code> date
+- <code>tt_download</code> : Download one or more <code>TidyTuesday</code> files
+- <code>tt_load</code> : Load <code>TidyTuesday</code> data for a specified date from GitHub.</p>
+<p>For example, you can load the <code>TidyTuesday</code> data from 14 January 2020 using</p>
+<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb260-1"><a href="tidytuesday.html#cb260-1" tabindex="-1"></a>tidytuesdayR<span class="sc">::</span><span class="fu">tt_load</span>(<span class="st">&quot;2020-01-14&quot;</span>)</span></code></pre></div>
+<p>If the data consists of more than one file, you can decide which files to download using the argument <code>download_files</code>:</p>
+<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb261-1"><a href="tidytuesday.html#cb261-1" tabindex="-1"></a>tidytuesdayR<span class="sc">::</span><span class="fu">tt_load</span>(<span class="st">&quot;2020-05-05&quot;</span>, <span class="at">download_files =</span> <span class="st">&quot;villagers&quot;</span>)</span></code></pre></div>
 </div>
-<div id="preface" class="section level1 unnumbered hasAnchor">
-<h1>Preface<a href="index.html#preface" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>This document is a modification of the book <a href="https://privefl.github.io/advr38book/index.html">advr38book</a> by Florian Privé. Florian originally developed the materials for the doctoral school of Grenoble, France, but now they are used as the main course material for the PhD course <strong>Advanced R</strong> offered by the Graduate School of Health, Aarhus University, Denmark.
-The main aim of this book is to give the reader a greater understanding of the <code>R</code> language, and to enable them to produce more clean, sophisticated and efficient <code>R</code> code. The reader will learn about packages and tools to simplify their coding life, about data analysis and visualization, and about best practices when coding in <code>R</code>.
-After studying these materials, the reader should be able to</p>
+<div id="inspiration" class="section level2 unnumbered hasAnchor">
+<h2>Inspiration<a href="tidytuesday.html#inspiration" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>You can find inspiration from previous <code>TidyTuesday</code> projects online. Some examples are shown below:</p>
 <ul>
-<li>use RStudio with a better setup to be more efficient</li>
-<li>use Git as a version control system to track file changes</li>
-<li>understand how to write better and simpler code in <code>R</code></li>
-<li>manipulate and visualize data with the tidyverse and R Markdown</li>
-<li>produce efficient <code>R</code> code</li>
-<li>develop an <code>R</code> package.</li>
+<li><p>Jake Kaupp’s contribution on Chicago Bird Collisions:
+<a href="https://github.com/jkaupp/tidytuesdays/tree/master/2019/week18">
+<img src="images/tidy_tuesday_jake_kaupp.png" width="60%" style="display: block; margin: auto;" />
+</a></p></li>
+<li><p>Georgios Karamanis’ visualization of instant ramen reviews:
+<a href="https://github.com/gkaramanis/tidytuesday/tree/master/2019/2019-week-23">
+<img src="images/tidy_tuesday_georgios_karamanis_ramen.png" width="60%" style="display: block; margin: auto;" />
+</a></p></li>
+<li><p>Georgios Karamanis’ histogram of UFO sightings:
+<a href="https://github.com/gkaramanis/tidytuesday/tree/master/2019/2019-week-26">
+<img src="images/tidy_tuesday_georgios_karamanis_ufo.png" width="60%" style="display: block; margin: auto;" />
+</a></p></li>
+<li><p>Dr. Torsten Sprenger’s visualizations of the gender bias in scientific publishing:
+<a href="https://github.com/spren9er/tidytuesday/blob/master/tidytuesday_201916_new_economist.r">
+<img src="images/tidy_tuesday_torsten_sprenger.png" width="60%" style="display: block; margin: auto;" />
+</a></p></li>
 </ul>
-<div id="how-to-read-this-book" class="section level2 unnumbered hasAnchor">
-<h2>How to read this book<a href="index.html#how-to-read-this-book" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Readers are recommended to have a basic understanding of <code>R</code> and some experience writing <code>R</code> code. You should, for example, be able to create variables, define functions, implement loops and subset objects such as vectors and data frames.
-If you are new to <code>R</code>, you can take a look at Garrett Grolemund’s <a href="https://rstudio-education.github.io/hopr/">Hands-On Programming with R</a> (2014), a book that uses hands-on examples to teach you how to program in <code>R</code>. Some other useful resources are</p>
-<ul>
-<li><a href="https://rladiessydney.org/courses/ryouwithme/01-basicbasics-0/">Basic Basics</a>, a lesson unit from <a href="https://rladiessydney.org/">R-Ladies Sydney</a> providing an opinionated tour of RStudio for new users and a step-by-step guide to installing and using <code>R</code> packages.</li>
-<li><a href="https://posit.co/resources/videos/a-gentle-introduction-to-tidy-statistics-in-r/">A Gentle Introduction to Tidy Statistics in R</a> (Thomas Mock, 2019), a one-hour free video webinar about how to get started quickly with basics of research statistics in <code>R</code>.</li>
-<li><a href="https://posit.cloud/learn/recipes">Posit Recipes</a>, a collection of <code>R</code> code snippets and instructions featuring up-to-date best practices for coding in <code>R</code>.</li>
-<li><a href="https://www.rstudio.com/tags/essentials/">The RStudio Essentials Series</a>, a webinar series about how to program and manage <code>R</code> projects using RStudio’s tools. These videos will also help you learn good development practices.</li>
-</ul>
-<p>Finally, posit also provides some very useful <a href="https://posit.co/resources/cheatsheets/">cheatsheets</a>, for example about the <a href="https://rstudio.github.io/cheatsheets/html/rstudio-ide.html">RStudio IDE</a>, that you may find helpful.</p>
-<p>In total, this book consists of eight chapters. The first chapter is a short introduction covering prerequisites, content and other useful resources. The following six chapters are theoretical and cover the following topics</p>
-<ul>
-<li>Good practices</li>
-<li>Advanced <code>R</code> programming</li>
-<li>R Markdown</li>
-<li>Data analysis with the tidyverse</li>
-<li>Code performance</li>
-<li>How to make an <code>R</code> package</li>
-</ul>
-<p>The final chapter is an opportunity for the reader to apply the new theory using real data from <a href="https://github.com/rfordatascience/tidytuesday/blob/master/README.md">Tidy Tuesday</a>.</p>
-<p>The reader does not need to read through the materials from beginning to end. I have tried to make each chapter as self-contained as possible, and the reader should be able to only read the parts that are most interesting or relevant.</p>
 </div>
-<div id="license" class="section level2 unnumbered hasAnchor">
-<h2>License<a href="index.html#license" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>This material is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 License</a>.</p>
-<p><img src="images/new_hexsticker.png" width="60%" style="display: block; margin: auto;" /></p>
+<div id="advanced-r-project---tidyfriday" class="section level2 hasAnchor" number="8.2">
+<h2><span class="header-section-number">8.2</span> Advanced R Project - <code>TidyFriday</code><a href="tidytuesday.html#advanced-r-project---tidyfriday" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Let’s make our own mini version of <code>TidyTuesday</code>. As you will present your results on Friday, we can call this project <code>TidyFriday</code> 😉.</p>
+<ol style="list-style-type: decimal">
+<li>Work together in teams of 2 (or 3).</li>
+<li>Choose a data set from the list of available <code>TidyTuesday</code> data sets (<code>tidytuesdayR::tt_available()</code>).</li>
+<li>Come up with a question or find interesting aspects to visualize. You can also recreate an existing visualization.</li>
+<li>Apply the functions you have learned in this course and try to learn new things to create an interesting plot.</li>
+<li>Share the resulting plot(s) and the code on GitHub.</li>
+</ol>
+<p>Friday afternoon, you will give a short presentation where you talk about challenges and conclusions from the plot.</p>
+<div id="presentation" class="section level3 unnumbered hasAnchor">
+<h3>Presentation<a href="tidytuesday.html#presentation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Make a short (5-10 min) presentation. You can simply make an HTML file from R Markdown and upload it to GitHub. The HTML file can then be previewed on <a href="http://htmlpreview.github.io/" class="uri">http://htmlpreview.github.io/</a>. The presentation should include:</p>
+<ul>
+<li>A short introduction to the data set and the variables you chose to visualize</li>
+<li>Your results and a discussion about the trends/patterns in the data</li>
+<li>If you chose to recreate a visualization, comment on the quality of the plot or potential problems</li>
+<li>The generative code and comments on the steps and transformations you applied to the data</li>
+<li>Potential other tidyverse functions or packages that were particularly useful</li>
+</ul>
+</div>
+<div id="examples" class="section level3 unnumbered hasAnchor">
+<h3>Examples<a href="tidytuesday.html#examples" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Below, you can find some examples from previous years:</p>
+<ul>
+<li><p><a href="presentations/alcohol-consumption.html">Alcohol Consumption</a></p></li>
+<li><p><a href="presentations/lego.html">LEGO sets</a></p></li>
+<li><p><a href="presentations/f1.html">F1 winners</a></p></li>
+<li><p><a href="presentations/baby-names.html">Baby Names</a></p></li>
+<li><p><a href="presentations/UFO_Sightings.html">UFO sightings</a></p></li>
+<li><p><a href="presentations/tornados.html">Tornados</a></p></li>
+<li><p><a href="presentations/wealth-inequalities.html">Wealth Inequalities in the USA</a></p></li>
+<li><p><a href="presentations/TidyTuesday_Eurovision.html">Eurovision</a></p></li>
+<li><p><a href="presentations/Horror-movies.docx">Horror Movies</a></p></li>
+<li><p><a href="presentations/package-stRoke.html">A Package for Clinical Data</a></p></li>
+<li><p><a href="presentations/package_banalyzer.html">A Package to read BAM files</a></p></li>
+</ul>
 
+</div>
 </div>
 </div>
             </section>
@@ -382,8 +420,8 @@ If you are new to <code>R</code>, you can take a look at Garrett Grolemund’s <
           </div>
         </div>
       </div>
+<a href="packages.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
-<a href="introduction.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

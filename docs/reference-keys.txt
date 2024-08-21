@@ -82,11 +82,6 @@ ignore-files
 the-inst-directory
 pkg-data
 release-on-cran
-project
-what-is-tidy-tuesday
-tidy-thursday
-choose-a-dataset
-visualize-the-data
-compilation-of-tweets
-example
-presentation
+tidytuesday
+loading-tidytuesday-data
+advanced-r-project---tidyfriday
