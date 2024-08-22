@@ -26,20 +26,20 @@ You can see the full list on the [`TidyTuesday` GitHub repository](https://githu
 
 You can access any `TidyTuesday` data set with the package `tidytuesdayR`. `tidytuesdayR` includes several functions:
 
--`tt_available` : Lists all data sets ever released by `TidyTuesday`
-- `last_tuesday` : Find the most recent `TidyTuesday` date
-- `tt_download` : Download one or more `TidyTuesday` files
-- `tt_load` : Load `TidyTuesday` data for a specified date from GitHub.
+- `tt_available()` : Lists all data sets ever released by `TidyTuesday`
+- `last_tuesday()` : Find the most recent `TidyTuesday` date
+- `tt_download()` : Download one or more `TidyTuesday` files
+- `tt_load()` : Load `TidyTuesday` data for a specified date from GitHub.
 
 For example, you can load the `TidyTuesday` data from 14 January 2020 using
 
-```{r, tidy='styler', collapse=TRUE, eval=FALSE}
+```{r, tidy='styler', collapse=TRUE}
 tidytuesdayR::tt_load("2020-01-14")
 ```
 
 If the data consists of more than one file, you can decide which files to download using the argument `download_files`:
 
-```{r, tidy='styler', collapse=TRUE, eval=FALSE}
+```{r, tidy='styler', collapse=TRUE}
 tidytuesdayR::tt_load("2020-05-05", download_files = "villagers")
 ```
 

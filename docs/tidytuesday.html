@@ -342,14 +342,34 @@ You can see the full list on the <a href="https://github.com/rfordatascience/tid
 <div id="loading-tidytuesday-data" class="section level2 hasAnchor" number="8.1">
 <h2><span class="header-section-number">8.1</span> Loading <code>TidyTuesday</code> data<a href="tidytuesday.html#loading-tidytuesday-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>You can access any <code>TidyTuesday</code> data set with the package <code>tidytuesdayR</code>. <code>tidytuesdayR</code> includes several functions:</p>
-<p>-<code>tt_available</code> : Lists all data sets ever released by <code>TidyTuesday</code>
-- <code>last_tuesday</code> : Find the most recent <code>TidyTuesday</code> date
-- <code>tt_download</code> : Download one or more <code>TidyTuesday</code> files
-- <code>tt_load</code> : Load <code>TidyTuesday</code> data for a specified date from GitHub.</p>
+<ul>
+<li><code>tt_available()</code> : Lists all data sets ever released by <code>TidyTuesday</code></li>
+<li><code>last_tuesday()</code> : Find the most recent <code>TidyTuesday</code> date</li>
+<li><code>tt_download()</code> : Download one or more <code>TidyTuesday</code> files</li>
+<li><code>tt_load()</code> : Load <code>TidyTuesday</code> data for a specified date from GitHub.</li>
+</ul>
 <p>For example, you can load the <code>TidyTuesday</code> data from 14 January 2020 using</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="tidytuesday.html#cb1-1" tabindex="-1"></a>tidytuesdayR<span class="sc">::</span><span class="fu">tt_load</span>(<span class="st">&quot;2020-01-14&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="tidytuesday.html#cb1-1" tabindex="-1"></a>tidytuesdayR<span class="sc">::</span><span class="fu">tt_load</span>(<span class="st">&quot;2020-01-14&quot;</span>)</span>
+<span id="cb1-2"><a href="tidytuesday.html#cb1-2" tabindex="-1"></a><span class="co">#&gt; --- Compiling #TidyTuesday Information for 2020-01-14 ----</span></span>
+<span id="cb1-3"><a href="tidytuesday.html#cb1-3" tabindex="-1"></a><span class="co">#&gt; --- There is 1 file available ---</span></span>
+<span id="cb1-4"><a href="tidytuesday.html#cb1-4" tabindex="-1"></a><span class="co">#&gt; --- Starting Download ---</span></span>
+<span id="cb1-5"><a href="tidytuesday.html#cb1-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb1-6"><a href="tidytuesday.html#cb1-6" tabindex="-1"></a><span class="co">#&gt;  Downloading file 1 of 1: `passwords.csv`</span></span>
+<span id="cb1-7"><a href="tidytuesday.html#cb1-7" tabindex="-1"></a><span class="co">#&gt; --- Download complete ---</span></span>
+<span id="cb1-8"><a href="tidytuesday.html#cb1-8" tabindex="-1"></a><span class="co">#&gt; Available datasets:</span></span>
+<span id="cb1-9"><a href="tidytuesday.html#cb1-9" tabindex="-1"></a><span class="co">#&gt;  passwords </span></span>
+<span id="cb1-10"><a href="tidytuesday.html#cb1-10" tabindex="-1"></a><span class="co">#&gt;  </span></span></code></pre></div>
 <p>If the data consists of more than one file, you can decide which files to download using the argument <code>download_files</code>:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="tidytuesday.html#cb2-1" tabindex="-1"></a>tidytuesdayR<span class="sc">::</span><span class="fu">tt_load</span>(<span class="st">&quot;2020-05-05&quot;</span>, <span class="at">download_files =</span> <span class="st">&quot;villagers&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="tidytuesday.html#cb2-1" tabindex="-1"></a>tidytuesdayR<span class="sc">::</span><span class="fu">tt_load</span>(<span class="st">&quot;2020-05-05&quot;</span>, <span class="at">download_files =</span> <span class="st">&quot;villagers&quot;</span>)</span>
+<span id="cb2-2"><a href="tidytuesday.html#cb2-2" tabindex="-1"></a><span class="co">#&gt; --- Compiling #TidyTuesday Information for 2020-05-05 ----</span></span>
+<span id="cb2-3"><a href="tidytuesday.html#cb2-3" tabindex="-1"></a><span class="co">#&gt; --- There are 4 files available ---</span></span>
+<span id="cb2-4"><a href="tidytuesday.html#cb2-4" tabindex="-1"></a><span class="co">#&gt; --- Starting Download ---</span></span>
+<span id="cb2-5"><a href="tidytuesday.html#cb2-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-6"><a href="tidytuesday.html#cb2-6" tabindex="-1"></a><span class="co">#&gt;  Downloading file 1 of 1: `villagers.csv`</span></span>
+<span id="cb2-7"><a href="tidytuesday.html#cb2-7" tabindex="-1"></a><span class="co">#&gt; --- Download complete ---</span></span>
+<span id="cb2-8"><a href="tidytuesday.html#cb2-8" tabindex="-1"></a><span class="co">#&gt; Available datasets:</span></span>
+<span id="cb2-9"><a href="tidytuesday.html#cb2-9" tabindex="-1"></a><span class="co">#&gt;  villagers </span></span>
+<span id="cb2-10"><a href="tidytuesday.html#cb2-10" tabindex="-1"></a><span class="co">#&gt;  </span></span></code></pre></div>
 </div>
 <div id="inspiration" class="section level2 unnumbered hasAnchor">
 <h2>Inspiration<a href="tidytuesday.html#inspiration" class="anchor-section" aria-label="Anchor link to header"></a></h2>
