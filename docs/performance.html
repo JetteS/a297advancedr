@@ -23,7 +23,7 @@
 <meta name="author" content="Jette Steinbach" />
 
 
-<meta name="date" content="2024-08-21" />
+<meta name="date" content="2024-08-22" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -427,7 +427,7 @@ In this chapter, you will learn how to write R(cpp) code that is fast.</p>
 <span id="cb167-8"><a href="performance.html#cb167-8" tabindex="-1"></a>  }</span>
 <span id="cb167-9"><a href="performance.html#cb167-9" tabindex="-1"></a>})</span></code></pre></div>
 <pre><code>#&gt;    user  system elapsed 
-#&gt;    0.23    0.29    0.86</code></pre>
+#&gt;    0.56    0.31    0.84</code></pre>
 <p>Here, at each iteration, you are reallocating a vector (of increasing size). Not only computations take time, memory allocations do too. This makes your code quadratic with the size of <code>x</code> (if you multiply the size of <code>x</code> by 2, you can expect the execution time to be multiplied by 4, for large sample sizes), whereas it should be only linear.</p>
 <p>What happens is similar to if you would like to climb these stairs, you climb one stair, go to the bottom, then climb two stairs, go to bottom, climb three, and so on. That takes way more time than just climbing all stairs at once.</p>
 <p><img src="https://privefl.github.io/blog/images/stairs.jpg" width="50%" style="display: block; margin: auto;" /></p>
@@ -454,7 +454,7 @@ In this chapter, you will learn how to write R(cpp) code that is fast.</p>
 <span id="cb173-7"><a href="performance.html#cb173-7" tabindex="-1"></a>  }</span>
 <span id="cb173-8"><a href="performance.html#cb173-8" tabindex="-1"></a>})</span></code></pre></div>
 <pre><code>#&gt;    user  system elapsed 
-#&gt;    0.00    0.00    0.01</code></pre>
+#&gt;    0.02    0.00    0.01</code></pre>
 <div class="sourceCode" id="cb175"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb175-1"><a href="performance.html#cb175-1" tabindex="-1"></a><span class="fu">all.equal</span>(<span class="fu">unlist</span>(res3), res)</span></code></pre></div>
 <pre><code>#&gt; [1] TRUE</code></pre>
 <p>With recent versions of R (&gt;= 3.4), you can efficiently grow a vector using</p>
@@ -467,7 +467,7 @@ In this chapter, you will learn how to write R(cpp) code that is fast.</p>
 <span id="cb177-7"><a href="performance.html#cb177-7" tabindex="-1"></a>  }</span>
 <span id="cb177-8"><a href="performance.html#cb177-8" tabindex="-1"></a>})</span></code></pre></div>
 <pre><code>#&gt;    user  system elapsed 
-#&gt;       0       0       0</code></pre>
+#&gt;    0.02    0.00    0.02</code></pre>
 <div class="sourceCode" id="cb179"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb179-1"><a href="performance.html#cb179-1" tabindex="-1"></a><span class="fu">all.equal</span>(res4, res)</span></code></pre></div>
 <pre><code>#&gt; [1] TRUE</code></pre>
 <blockquote>
@@ -482,7 +482,7 @@ In this chapter, you will learn how to write R(cpp) code that is fast.</p>
 <div class="sourceCode" id="cb185"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb185-1"><a href="performance.html#cb185-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="fl">1e7</span>)</span>
 <span id="cb185-2"><a href="performance.html#cb185-2" tabindex="-1"></a><span class="fu">system.time</span>(<span class="fu">cumsum</span>(x))</span></code></pre></div>
 <pre><code>#&gt;    user  system elapsed 
-#&gt;    0.04    0.00    0.08</code></pre>
+#&gt;    0.06    0.00    0.08</code></pre>
 <hr />
 <p>As a second example, let us generate a matrix of uniform values (max changing for every column):</p>
 <div class="sourceCode" id="cb187"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb187-1"><a href="performance.html#cb187-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fl">1e3</span></span>
@@ -494,10 +494,10 @@ In this chapter, you will learn how to write R(cpp) code that is fast.</p>
 <span id="cb187-7"><a href="performance.html#cb187-7" tabindex="-1"></a>  }</span>
 <span id="cb187-8"><a href="performance.html#cb187-8" tabindex="-1"></a>})</span></code></pre></div>
 <pre><code>#&gt;    user  system elapsed 
-#&gt;    0.58    1.43    2.66</code></pre>
+#&gt;    0.68    0.90    1.78</code></pre>
 <div class="sourceCode" id="cb189"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb189-1"><a href="performance.html#cb189-1" tabindex="-1"></a><span class="fu">apply</span>(mat, <span class="dv">2</span>, max)[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span></code></pre></div>
-<pre><code>#&gt;  [1] 0.9999517 1.9995595 2.9968458 3.9995284 4.9891299 5.9991612 6.9914785 7.9975349
-#&gt;  [9] 8.9988360 9.9971460</code></pre>
+<pre><code>#&gt;  [1] 0.9996541 1.9978212 2.9977168 3.9982502 4.9999163 5.9995175 6.9935105 7.9969692
+#&gt;  [9] 8.9988721 9.9904408</code></pre>
 <p>Instead, we should pre-allocate a matrix of the right size:</p>
 <div class="sourceCode" id="cb191"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb191-1"><a href="performance.html#cb191-1" tabindex="-1"></a><span class="fu">system.time</span>({</span>
 <span id="cb191-2"><a href="performance.html#cb191-2" tabindex="-1"></a>  mat3 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, n, <span class="fu">length</span>(max))</span>
@@ -506,10 +506,10 @@ In this chapter, you will learn how to write R(cpp) code that is fast.</p>
 <span id="cb191-5"><a href="performance.html#cb191-5" tabindex="-1"></a>  }</span>
 <span id="cb191-6"><a href="performance.html#cb191-6" tabindex="-1"></a>})</span></code></pre></div>
 <pre><code>#&gt;    user  system elapsed 
-#&gt;    0.02    0.00    0.01</code></pre>
+#&gt;    0.02    0.00    0.03</code></pre>
 <div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb193-1"><a href="performance.html#cb193-1" tabindex="-1"></a><span class="fu">apply</span>(mat3, <span class="dv">2</span>, max)[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span></code></pre></div>
-<pre><code>#&gt;  [1] 0.9999039 1.9994663 2.9962688 3.9989532 4.9952994 5.9967417 6.9956571 7.9995939
-#&gt;  [9] 8.9914785 9.9829999</code></pre>
+<pre><code>#&gt;  [1] 0.9997221 1.9998376 2.9999180 3.9892833 4.9958446 5.9925397 6.9956999 7.9902952
+#&gt;  [9] 8.9954511 9.9981999</code></pre>
 <p>Or we could use a list instead. What is nice with using a list is that you don’t need to pre-allocate. Indeed, as opposed to atomic vectors, each element of a list is in different places in memory so that you don’t have to reallocate all the data when you add an element to a list.</p>
 <div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb195-1"><a href="performance.html#cb195-1" tabindex="-1"></a><span class="fu">system.time</span>({</span>
 <span id="cb195-2"><a href="performance.html#cb195-2" tabindex="-1"></a>  l <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
@@ -519,19 +519,19 @@ In this chapter, you will learn how to write R(cpp) code that is fast.</p>
 <span id="cb195-6"><a href="performance.html#cb195-6" tabindex="-1"></a>  mat4 <span class="ot">&lt;-</span> <span class="fu">do.call</span>(<span class="st">&quot;cbind&quot;</span>, l)</span>
 <span id="cb195-7"><a href="performance.html#cb195-7" tabindex="-1"></a>})</span></code></pre></div>
 <pre><code>#&gt;    user  system elapsed 
-#&gt;    0.01    0.00    0.01</code></pre>
+#&gt;    0.00    0.00    0.03</code></pre>
 <div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb197-1"><a href="performance.html#cb197-1" tabindex="-1"></a><span class="fu">apply</span>(mat4, <span class="dv">2</span>, max)[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span></code></pre></div>
-<pre><code>#&gt;  [1] 0.9999257 1.9974230 2.9978316 3.9994049 4.9959614 5.9978416 6.9937523 7.9825662
-#&gt;  [9] 8.9941963 9.9989175</code></pre>
+<pre><code>#&gt;  [1] 0.9994614 1.9979968 2.9931106 3.9986344 4.9986402 5.9994683 6.9920298 7.9938272
+#&gt;  [9] 8.9832562 9.9911513</code></pre>
 <p>Instead of pre-allocating yourself, you can use <code>sapply</code> (or <code>lapply</code> and calling <code>do.call()</code> after, as previously done):</p>
 <div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb199-1"><a href="performance.html#cb199-1" tabindex="-1"></a><span class="fu">system.time</span>(</span>
 <span id="cb199-2"><a href="performance.html#cb199-2" tabindex="-1"></a>  mat4 <span class="ot">&lt;-</span> <span class="fu">sapply</span>(max, <span class="cf">function</span>(m) <span class="fu">runif</span>(n, <span class="at">max =</span> m))</span>
 <span id="cb199-3"><a href="performance.html#cb199-3" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>#&gt;    user  system elapsed 
-#&gt;    0.01    0.00    0.02</code></pre>
+#&gt;    0.02    0.00    0.01</code></pre>
 <div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb201-1"><a href="performance.html#cb201-1" tabindex="-1"></a><span class="fu">apply</span>(mat4, <span class="dv">2</span>, max)[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span></code></pre></div>
-<pre><code>#&gt;  [1] 0.9999742 1.9989495 2.9981049 3.9997492 4.9962149 5.9901385 6.9983507 7.9980954
-#&gt;  [9] 8.9999263 9.9876734</code></pre>
+<pre><code>#&gt;  [1] 0.999729 1.996423 2.999409 3.999896 4.999561 5.991353 6.997262 7.991618 8.999933
+#&gt; [10] 9.999366</code></pre>
 <p>Don’t listen to people telling you that <code>sapply()</code> is a vectorized operation that is so much faster than loops. That’s false, and for-loops can actually be much faster than <code>sapply()</code> when using just-in-time (JIT) compilation. You can learn more with <a href="https://privefl.github.io/blog/why-loops-are-slow-in-r/">this blog post</a>.</p>
 <!-- ### Access columns of a matrix -->
 <!-- When you do computations on a matrix, recall that a matrix is just a vector with some dimensions. -->
@@ -615,7 +615,7 @@ Read more with <a href="http://www.noamross.net/blog/2014/4/16/vectorization-in-
 <p>Your task: find a vectorized solution for this problem:</p>
 <div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb209-1"><a href="performance.html#cb209-1" tabindex="-1"></a><span class="fu">system.time</span>(res2 <span class="ot">&lt;-</span> <span class="fu">monte_carlo_vec</span>(N))</span></code></pre></div>
 <pre><code>#&gt;    user  system elapsed 
-#&gt;    0.01    0.00    0.02</code></pre>
+#&gt;    0.00    0.00    0.02</code></pre>
 <div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb211-1"><a href="performance.html#cb211-1" tabindex="-1"></a>res2</span></code></pre></div>
 <pre><code>#&gt; [1] 0.33295</code></pre>
 </div>
@@ -666,14 +666,14 @@ Read more with <a href="http://www.noamross.net/blog/2014/4/16/vectorization-in-
 <span id="cb215-7"><a href="performance.html#cb215-7" tabindex="-1"></a>  }</span>
 <span id="cb215-8"><a href="performance.html#cb215-8" tabindex="-1"></a>})</span></code></pre></div>
 <pre><code>#&gt;    user  system elapsed 
-#&gt;    0.26    0.02    0.43</code></pre>
+#&gt;    0.36    0.00    0.44</code></pre>
 <p>Try first to remove one of the two loops using <code>sweep()</code> instead. Which loop should you choose to remove ideally?
 A solution with <code>sweep()</code> can take</p>
 <pre><code>#&gt;    user  system elapsed 
-#&gt;    0.03    0.00    0.06</code></pre>
+#&gt;    0.03    0.03    0.06</code></pre>
 <p>Then, try to implement a fully vectorized solution based on this hint: <span class="math inline">\(\text{dist}(X_i, Y_j)^2 = (X_i - Y_j)^T (X_i - Y_j) = X_i^T X_i + Y_j^T Y_j - 2 X_i^T Y_j\)</span>. A faster solution using <code>outer()</code> and <code>tcrossprod()</code> takes</p>
 <pre><code>#&gt;    user  system elapsed 
-#&gt;    0.00    0.00    0.02</code></pre>
+#&gt;       0       0       0</code></pre>
 </div>
 </div>
 <div id="algorithms-data-structures" class="section level2 hasAnchor" number="6.6">
@@ -703,7 +703,7 @@ You do not need to store all values of <span class="math inline">\(X\)</span>.</
 <span id="cb219-12"><a href="performance.html#cb219-12" tabindex="-1"></a>  p <span class="ot">&lt;-</span> count <span class="sc">/</span> N</span>
 <span id="cb219-13"><a href="performance.html#cb219-13" tabindex="-1"></a>})</span></code></pre></div>
 <pre><code>#&gt;    user  system elapsed 
-#&gt;    0.05    0.00    0.06</code></pre>
+#&gt;    0.08    0.00    0.08</code></pre>
 <div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb221-1"><a href="performance.html#cb221-1" tabindex="-1"></a>p</span></code></pre></div>
 <pre><code>#&gt; [1] 0.88454</code></pre>
 <p>Try to vectorize this after having written the value of X(0), X(1), X(2), and X(3).
@@ -711,13 +711,13 @@ What would be the benefit of writing an Rcpp function over a simple vectorized R
 <div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb223-1"><a href="performance.html#cb223-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
 <span id="cb223-2"><a href="performance.html#cb223-2" tabindex="-1"></a><span class="fu">system.time</span>(p2 <span class="ot">&lt;-</span> advr38pkg<span class="sc">::</span><span class="fu">random_walk_neg_prop</span>(<span class="fl">1e5</span>))</span></code></pre></div>
 <pre><code>#&gt;    user  system elapsed 
-#&gt;    0.00    0.00    0.03</code></pre>
+#&gt;    0.00    0.01    0.00</code></pre>
 <div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb225-1"><a href="performance.html#cb225-1" tabindex="-1"></a>p2</span></code></pre></div>
 <pre><code>#&gt; [1] 0.88454</code></pre>
 <div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb227-1"><a href="performance.html#cb227-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
 <span id="cb227-2"><a href="performance.html#cb227-2" tabindex="-1"></a><span class="fu">system.time</span>(p3 <span class="ot">&lt;-</span> advr38pkg<span class="sc">::</span><span class="fu">random_walk_neg_prop</span>(<span class="fl">1e7</span>))</span></code></pre></div>
 <pre><code>#&gt;    user  system elapsed 
-#&gt;    0.16    0.00    0.31</code></pre>
+#&gt;    0.25    0.00    0.31</code></pre>
 <div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb229-1"><a href="performance.html#cb229-1" tabindex="-1"></a>p3</span></code></pre></div>
 <pre><code>#&gt; [1] 0.3400444</code></pre>
 <hr />
@@ -734,7 +734,7 @@ What would be the benefit of writing an Rcpp function over a simple vectorized R
 <span id="cb232-6"><a href="performance.html#cb232-6" tabindex="-1"></a>  }</span>
 <span id="cb232-7"><a href="performance.html#cb232-7" tabindex="-1"></a>})</span></code></pre></div>
 <pre><code>#&gt;    user  system elapsed 
-#&gt;    0.26    0.01    0.39</code></pre>
+#&gt;    0.36    0.00    0.39</code></pre>
 <hr />
 <p>Why <code>colSums()</code> on a whole matrix is faster than on only half of it?</p>
 <div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb234-1"><a href="performance.html#cb234-1" tabindex="-1"></a>m0 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="fl">1e6</span>), <span class="fl">1e3</span>, <span class="fl">1e3</span>)</span>
@@ -743,9 +743,9 @@ What would be the benefit of writing an Rcpp function over a simple vectorized R
 <span id="cb234-4"><a href="performance.html#cb234-4" tabindex="-1"></a>  <span class="fu">colSums</span>(m0)</span>
 <span id="cb234-5"><a href="performance.html#cb234-5" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>#&gt; Unit: microseconds
-#&gt;                  expr      min        lq      mean    median       uq      max neval
-#&gt;  colSums(m0[, 1:500]) 1635.501 1946.8515 2469.9160 2064.8010 2507.001 9930.602   100
-#&gt;           colSums(m0)  714.901  744.1015  867.0421  765.6015 1001.552 1515.701   100</code></pre>
+#&gt;                  expr      min       lq      mean   median       uq       max neval
+#&gt;  colSums(m0[, 1:500]) 1631.201 1867.851 2342.5980 2030.151 2321.851 10650.801   100
+#&gt;           colSums(m0)  724.000  756.851  848.9299  822.351  874.401  1484.401   100</code></pre>
 <hr />
 <p>Try to speed up this code by vectorizing it first, and/or by precomputing. Then, recode it in Rcpp and benchmark all the solutions you came up with.</p>
 <div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb236-1"><a href="performance.html#cb236-1" tabindex="-1"></a>M <span class="ot">&lt;-</span> <span class="dv">50</span></span>
@@ -782,18 +782,18 @@ What would be the benefit of writing an Rcpp function over a simple vectorized R
 <span id="cb245-6"><a href="performance.html#cb245-6" tabindex="-1"></a>  advr38pkg<span class="sc">::</span><span class="fu">count_by_breaks_fast</span>(x, breaks)</span>
 <span id="cb245-7"><a href="performance.html#cb245-7" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>#&gt; Unit: microseconds
-#&gt;                                                      expr     min       lq      mean
-#&gt;                                     table(cut(x, breaks)) 683.701 825.0510 1031.8029
-#&gt;                      hist(x, breaks, plot = FALSE)$counts 260.502 334.3510  383.8829
-#&gt;   advr38pkg::count_by_breaks(x, breaks, use_outer = TRUE) 221.901 368.5515  439.6511
-#&gt;  advr38pkg::count_by_breaks(x, breaks, use_outer = FALSE) 129.902 176.5015  194.4100
-#&gt;                advr38pkg::count_by_breaks_fast(x, breaks) 112.501 153.6005  177.8270
+#&gt;                                                      expr     min      lq     mean
+#&gt;                                     table(cut(x, breaks)) 616.601 745.851 923.1140
+#&gt;                      hist(x, breaks, plot = FALSE)$counts 282.202 338.252 383.1900
+#&gt;   advr38pkg::count_by_breaks(x, breaks, use_outer = TRUE) 264.202 373.500 421.9161
+#&gt;  advr38pkg::count_by_breaks(x, breaks, use_outer = FALSE) 132.601 178.301 204.8640
+#&gt;                advr38pkg::count_by_breaks_fast(x, breaks) 115.501 154.351 182.1620
 #&gt;    median       uq       max neval
-#&gt;  846.6505 929.6510 12473.801   100
-#&gt;  358.3510 418.5505   682.300   100
-#&gt;  421.8020 486.1510   862.701   100
-#&gt;  187.7510 196.3505   284.500   100
-#&gt;  167.2515 192.3020   285.901   100</code></pre>
+#&gt;  772.2015 844.1010 11861.101   100
+#&gt;  361.2000 410.2515   698.001   100
+#&gt;  393.1510 447.5515   789.201   100
+#&gt;  186.7510 210.5010   574.001   100
+#&gt;  165.9510 203.9015   390.901   100</code></pre>
 <div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb247-1"><a href="performance.html#cb247-1" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">100</span>, <span class="at">size =</span> <span class="fl">1e5</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb247-2"><a href="performance.html#cb247-2" tabindex="-1"></a>breaks2 <span class="ot">&lt;-</span> breaks <span class="sc">*</span> <span class="dv">10</span></span>
 <span id="cb247-3"><a href="performance.html#cb247-3" tabindex="-1"></a>breaks3 <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="at">length.out =</span> <span class="dv">100</span>)</span>
@@ -805,15 +805,15 @@ What would be the benefit of writing an Rcpp function over a simple vectorized R
 <span id="cb247-9"><a href="performance.html#cb247-9" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>#&gt; Unit: milliseconds
 #&gt;                                          expr       min        lq      mean    median
-#&gt;       advr38pkg::count_by_breaks(x2, breaks2)  1.140101  1.601650  1.855414  1.643101
-#&gt;  advr38pkg::count_by_breaks_fast(x2, breaks2)  1.002900  1.318351  1.527326  1.367452
-#&gt;       advr38pkg::count_by_breaks(x2, breaks3) 29.641301 33.800801 36.979740 35.833301
-#&gt;  advr38pkg::count_by_breaks_fast(x2, breaks3)  1.141501  1.301451  1.610745  1.379300
-#&gt;         uq       max neval
-#&gt;   1.896451 10.735000   100
-#&gt;   1.541802  9.646401   100
-#&gt;  39.130501 84.437501   100
-#&gt;   1.517801 10.738501   100</code></pre>
+#&gt;       advr38pkg::count_by_breaks(x2, breaks2)  1.154201  1.564501  1.973530  1.746252
+#&gt;  advr38pkg::count_by_breaks_fast(x2, breaks2)  1.160202  1.282201  1.608862  1.396901
+#&gt;       advr38pkg::count_by_breaks(x2, breaks3) 27.663401 32.434601 36.870294 35.029401
+#&gt;  advr38pkg::count_by_breaks_fast(x2, breaks3)  1.107102  1.276201  1.719384  1.392451
+#&gt;         uq     max neval
+#&gt;   1.971251 11.5434   100
+#&gt;   1.572151 11.1080   100
+#&gt;  38.578952 57.8955   100
+#&gt;   1.638801 12.3826   100</code></pre>
 <hr />
 <p>An R user wants to implement some sampling on a sparse matrix and provides this working code:</p>
 <div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb249-1"><a href="performance.html#cb249-1" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
@@ -825,14 +825,14 @@ What would be the benefit of writing an Rcpp function over a simple vectorized R
 <span id="cb249-7"><a href="performance.html#cb249-7" tabindex="-1"></a>  }</span>
 <span id="cb249-8"><a href="performance.html#cb249-8" tabindex="-1"></a>})</span></code></pre></div>
 <pre><code>#&gt;    user  system elapsed 
-#&gt;    0.45    0.02    1.05</code></pre>
+#&gt;    0.83    0.11    1.00</code></pre>
 <p>This code is slow; can you find two major reasons why?</p>
 <p>How can you more efficiently assign 1s? A faster solution would take:</p>
 <pre><code>#&gt;    user  system elapsed 
-#&gt;    0.00    0.03    0.12</code></pre>
+#&gt;    0.05    0.02    0.04</code></pre>
 <p>Can you use sampling with replacement (to avoid unnecessarily allocating memory) in this example? A faster solution would take:</p>
 <pre><code>#&gt;    user  system elapsed 
-#&gt;    0.02    0.00    0.01</code></pre>
+#&gt;    0.01    0.00    0.01</code></pre>
 <p>It would be even faster using Rcpp (cf. <a href="https://stackoverflow.com/a/45796424/6103040">this SO answer</a>).</p>
 <hr />
 <p>Make a fast function that returns all prime numbers up to a number <code>N</code>.</p>
@@ -841,7 +841,7 @@ What would be the benefit of writing an Rcpp function over a simple vectorized R
 <span id="cb253-3"><a href="performance.html#cb253-3" tabindex="-1"></a>  primes <span class="ot">&lt;-</span> advr38pkg<span class="sc">::</span><span class="fu">AllPrimesUpTo</span>(N)</span>
 <span id="cb253-4"><a href="performance.html#cb253-4" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>#&gt;    user  system elapsed 
-#&gt;    0.14    0.26    0.65</code></pre>
+#&gt;    0.13    0.18    0.34</code></pre>
 <div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb255-1"><a href="performance.html#cb255-1" tabindex="-1"></a><span class="fu">plot</span>(primes, <span class="at">pch =</span> <span class="dv">20</span>, <span class="at">cex =</span> <span class="fl">0.5</span>)</span></code></pre></div>
 <p><img src="performance_files/figure-html/unnamed-chunk-56-1.png" width="70%" style="display: block; margin: auto;" /></p>
 </div>

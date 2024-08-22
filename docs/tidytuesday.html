@@ -23,7 +23,7 @@
 <meta name="author" content="Jette Steinbach" />
 
 
-<meta name="date" content="2024-08-21" />
+<meta name="date" content="2024-08-22" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -347,31 +347,413 @@ You can see the full list on the <a href="https://github.com/rfordatascience/tid
 - <code>tt_download</code> : Download one or more <code>TidyTuesday</code> files
 - <code>tt_load</code> : Load <code>TidyTuesday</code> data for a specified date from GitHub.</p>
 <p>For example, you can load the <code>TidyTuesday</code> data from 14 January 2020 using</p>
-<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb260-1"><a href="tidytuesday.html#cb260-1" tabindex="-1"></a>tidytuesdayR<span class="sc">::</span><span class="fu">tt_load</span>(<span class="st">&quot;2020-01-14&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="tidytuesday.html#cb1-1" tabindex="-1"></a>tidytuesdayR<span class="sc">::</span><span class="fu">tt_load</span>(<span class="st">&quot;2020-01-14&quot;</span>)</span></code></pre></div>
 <p>If the data consists of more than one file, you can decide which files to download using the argument <code>download_files</code>:</p>
-<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb261-1"><a href="tidytuesday.html#cb261-1" tabindex="-1"></a>tidytuesdayR<span class="sc">::</span><span class="fu">tt_load</span>(<span class="st">&quot;2020-05-05&quot;</span>, <span class="at">download_files =</span> <span class="st">&quot;villagers&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="tidytuesday.html#cb2-1" tabindex="-1"></a>tidytuesdayR<span class="sc">::</span><span class="fu">tt_load</span>(<span class="st">&quot;2020-05-05&quot;</span>, <span class="at">download_files =</span> <span class="st">&quot;villagers&quot;</span>)</span></code></pre></div>
 </div>
 <div id="inspiration" class="section level2 unnumbered hasAnchor">
 <h2>Inspiration<a href="tidytuesday.html#inspiration" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>You can find inspiration from previous <code>TidyTuesday</code> projects online. Some examples are shown below:</p>
 <ul>
-<li><p>Jake Kaupp’s contribution on Chicago Bird Collisions:
+<li>Jake Kaupp’s contribution on Chicago Bird Collisions:
 <a href="https://github.com/jkaupp/tidytuesdays/tree/master/2019/week18">
 <img src="images/tidy_tuesday_jake_kaupp.png" width="60%" style="display: block; margin: auto;" />
-</a></p></li>
-<li><p>Georgios Karamanis’ visualization of instant ramen reviews:
+</a></li>
+</ul>
+<details>
+<summary>
+I want to see the source code!
+</summary>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="tidytuesday.html#cb3-1" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, lubridate, here, patchwork)</span>
+<span id="cb3-2"><a href="tidytuesday.html#cb3-2" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="tidytuesday.html#cb3-3" tabindex="-1"></a>bird_collisions <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-04-30/bird_collisions.csv&quot;</span>)</span>
+<span id="cb3-4"><a href="tidytuesday.html#cb3-4" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="tidytuesday.html#cb3-5" tabindex="-1"></a>plot_data <span class="ot">&lt;-</span> bird_collisions <span class="sc">%&gt;%</span></span>
+<span id="cb3-6"><a href="tidytuesday.html#cb3-6" tabindex="-1"></a>  <span class="fu">filter</span>(locality <span class="sc">==</span> <span class="st">&quot;CHI&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-7"><a href="tidytuesday.html#cb3-7" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb3-8"><a href="tidytuesday.html#cb3-8" tabindex="-1"></a>    <span class="at">month =</span> <span class="fu">month</span>(date),</span>
+<span id="cb3-9"><a href="tidytuesday.html#cb3-9" tabindex="-1"></a>    <span class="at">year =</span> <span class="fu">year</span>(date)</span>
+<span id="cb3-10"><a href="tidytuesday.html#cb3-10" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb3-11"><a href="tidytuesday.html#cb3-11" tabindex="-1"></a>  <span class="fu">unite</span>(<span class="st">&quot;binomial_name&quot;</span>, genus, species, <span class="at">sep =</span> <span class="st">&quot; &quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-12"><a href="tidytuesday.html#cb3-12" tabindex="-1"></a>  <span class="fu">count</span>(year, month, binomial_name) <span class="sc">%&gt;%</span></span>
+<span id="cb3-13"><a href="tidytuesday.html#cb3-13" tabindex="-1"></a>  <span class="fu">complete</span>(<span class="fu">nesting</span>(year, binomial_name), <span class="at">month =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="at">fill =</span> <span class="fu">list</span>(<span class="at">n =</span> <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-14"><a href="tidytuesday.html#cb3-14" tabindex="-1"></a>  <span class="fu">group_by</span>(year, binomial_name) <span class="sc">%&gt;%</span></span>
+<span id="cb3-15"><a href="tidytuesday.html#cb3-15" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">percent =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-16"><a href="tidytuesday.html#cb3-16" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">percent =</span> <span class="fu">ifelse</span>(<span class="fu">is.nan</span>(percent), <span class="dv">0</span>, percent))</span>
+<span id="cb3-17"><a href="tidytuesday.html#cb3-17" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="tidytuesday.html#cb3-18" tabindex="-1"></a>flower <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(plot_data, <span class="fu">aes</span>(<span class="at">x =</span> month, <span class="at">y =</span> percent, <span class="at">fill =</span> binomial_name)) <span class="sc">+</span></span>
+<span id="cb3-19"><a href="tidytuesday.html#cb3-19" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="at">size =</span> <span class="dv">0</span>, <span class="at">position =</span> <span class="fu">position_dodge</span>(), <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb3-20"><a href="tidytuesday.html#cb3-20" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> month.abb, <span class="at">breaks =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="cb3-21"><a href="tidytuesday.html#cb3-21" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">breaks =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.1</span>)) <span class="sc">+</span></span>
+<span id="cb3-22"><a href="tidytuesday.html#cb3-22" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_d</span>(<span class="st">&quot;Year&quot;</span>, <span class="at">option =</span> <span class="st">&quot;plasma&quot;</span>, <span class="at">direction =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb3-23"><a href="tidytuesday.html#cb3-23" tabindex="-1"></a>  <span class="fu">scale_color_viridis_d</span>(<span class="at">option =</span> <span class="st">&quot;plasma&quot;</span>, <span class="at">direction =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb3-24"><a href="tidytuesday.html#cb3-24" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_colorbar</span>()) <span class="sc">+</span></span>
+<span id="cb3-25"><a href="tidytuesday.html#cb3-25" tabindex="-1"></a>  <span class="fu">coord_polar</span>() <span class="sc">+</span></span>
+<span id="cb3-26"><a href="tidytuesday.html#cb3-26" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb3-27"><a href="tidytuesday.html#cb3-27" tabindex="-1"></a>    <span class="at">x =</span> <span class="cn">NULL</span>,</span>
+<span id="cb3-28"><a href="tidytuesday.html#cb3-28" tabindex="-1"></a>    <span class="at">y =</span> <span class="cn">NULL</span>,</span>
+<span id="cb3-29"><a href="tidytuesday.html#cb3-29" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Overall&quot;</span></span>
+<span id="cb3-30"><a href="tidytuesday.html#cb3-30" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb3-31"><a href="tidytuesday.html#cb3-31" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb3-32"><a href="tidytuesday.html#cb3-32" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb3-33"><a href="tidytuesday.html#cb3-33" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb3-34"><a href="tidytuesday.html#cb3-34" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb3-35"><a href="tidytuesday.html#cb3-35" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">&quot;#cccccc&quot;</span>, <span class="at">size =</span> <span class="fl">0.10</span>),</span>
+<span id="cb3-36"><a href="tidytuesday.html#cb3-36" tabindex="-1"></a>    <span class="at">panel.grid.major.x =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">&quot;#cccccc&quot;</span>, <span class="at">size =</span> <span class="fl">0.10</span>),</span>
+<span id="cb3-37"><a href="tidytuesday.html#cb3-37" tabindex="-1"></a>    <span class="at">panel.grid.major.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb3-38"><a href="tidytuesday.html#cb3-38" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb3-39"><a href="tidytuesday.html#cb3-39" tabindex="-1"></a>    <span class="at">legend.background =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb3-40"><a href="tidytuesday.html#cb3-40" tabindex="-1"></a>    <span class="at">legend.key =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb3-41"><a href="tidytuesday.html#cb3-41" tabindex="-1"></a>    <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">&quot;white&quot;</span>, <span class="at">color =</span> <span class="st">&quot;white&quot;</span>),</span>
+<span id="cb3-42"><a href="tidytuesday.html#cb3-42" tabindex="-1"></a>    <span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">&quot;black&quot;</span>),</span>
+<span id="cb3-43"><a href="tidytuesday.html#cb3-43" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">&quot;black&quot;</span>),</span>
+<span id="cb3-44"><a href="tidytuesday.html#cb3-44" tabindex="-1"></a>    <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">size =</span> <span class="dv">10</span>),</span>
+<span id="cb3-45"><a href="tidytuesday.html#cb3-45" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb3-46"><a href="tidytuesday.html#cb3-46" tabindex="-1"></a>    <span class="at">axis.ticks.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb3-47"><a href="tidytuesday.html#cb3-47" tabindex="-1"></a>    <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb3-48"><a href="tidytuesday.html#cb3-48" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">t =</span> <span class="fl">0.8</span> <span class="sc">*</span> <span class="dv">11</span> <span class="sc">/</span> <span class="dv">2</span>)),</span>
+<span id="cb3-49"><a href="tidytuesday.html#cb3-49" tabindex="-1"></a>    <span class="co"># axis.text.y = element_text(color = &quot;black&quot;, margin = margin(t = 0.8 * 11/2)),</span></span>
+<span id="cb3-50"><a href="tidytuesday.html#cb3-50" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>),</span>
+<span id="cb3-51"><a href="tidytuesday.html#cb3-51" tabindex="-1"></a>    <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">9</span>),</span>
+<span id="cb3-52"><a href="tidytuesday.html#cb3-52" tabindex="-1"></a>    <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">9</span>),</span>
+<span id="cb3-53"><a href="tidytuesday.html#cb3-53" tabindex="-1"></a>    <span class="at">plot.margin =</span> <span class="fu">margin</span>(<span class="dv">11</span> <span class="sc">/</span> <span class="dv">2</span>, <span class="dv">11</span> <span class="sc">/</span> <span class="dv">2</span>, <span class="dv">11</span> <span class="sc">/</span> <span class="dv">2</span>, <span class="dv">11</span> <span class="sc">/</span> <span class="dv">2</span>),</span>
+<span id="cb3-54"><a href="tidytuesday.html#cb3-54" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">size =</span> <span class="dv">14</span>, <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">b =</span> <span class="dv">10</span>)),</span>
+<span id="cb3-55"><a href="tidytuesday.html#cb3-55" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">size =</span> <span class="dv">12</span>, <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">b =</span> <span class="dv">15</span>)),</span>
+<span id="cb3-56"><a href="tidytuesday.html#cb3-56" tabindex="-1"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">9</span>, <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">t =</span> <span class="dv">10</span>))</span>
+<span id="cb3-57"><a href="tidytuesday.html#cb3-57" tabindex="-1"></a>  )</span>
+<span id="cb3-58"><a href="tidytuesday.html#cb3-58" tabindex="-1"></a></span>
+<span id="cb3-59"><a href="tidytuesday.html#cb3-59" tabindex="-1"></a>petals <span class="ot">&lt;-</span> flower <span class="sc">+</span></span>
+<span id="cb3-60"><a href="tidytuesday.html#cb3-60" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">group =</span> year) <span class="sc">+</span></span>
+<span id="cb3-61"><a href="tidytuesday.html#cb3-61" tabindex="-1"></a>  <span class="fu">geom_path</span>(<span class="fu">aes</span>(<span class="at">color =</span> binomial_name), <span class="at">size =</span> <span class="fl">0.2</span>, <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb3-62"><a href="tidytuesday.html#cb3-62" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;By Species&quot;</span>) <span class="sc">+</span></span>
+<span id="cb3-63"><a href="tidytuesday.html#cb3-63" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>binomial_name, <span class="at">labeller =</span> <span class="fu">label_wrap_gen</span>(<span class="dv">10</span>), <span class="at">nrow =</span> <span class="dv">7</span>) <span class="sc">+</span></span>
+<span id="cb3-64"><a href="tidytuesday.html#cb3-64" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb3-65"><a href="tidytuesday.html#cb3-65" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb3-66"><a href="tidytuesday.html#cb3-66" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb3-67"><a href="tidytuesday.html#cb3-67" tabindex="-1"></a>  )</span>
+<span id="cb3-68"><a href="tidytuesday.html#cb3-68" tabindex="-1"></a></span>
+<span id="cb3-69"><a href="tidytuesday.html#cb3-69" tabindex="-1"></a>legend <span class="ot">&lt;-</span> plot_data <span class="sc">%&gt;%</span></span>
+<span id="cb3-70"><a href="tidytuesday.html#cb3-70" tabindex="-1"></a>  <span class="fu">filter</span>(binomial_name <span class="sc">==</span> <span class="st">&quot;Setophaga fusca&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-71"><a href="tidytuesday.html#cb3-71" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> month, <span class="at">y =</span> percent, <span class="at">fill =</span> binomial_name, <span class="at">group =</span> year)) <span class="sc">+</span></span>
+<span id="cb3-72"><a href="tidytuesday.html#cb3-72" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="at">size =</span> <span class="dv">0</span>, <span class="at">position =</span> <span class="fu">position_dodge</span>(), <span class="at">alpha =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb3-73"><a href="tidytuesday.html#cb3-73" tabindex="-1"></a>  <span class="fu">geom_path</span>(<span class="fu">aes</span>(<span class="at">color =</span> binomial_name), <span class="at">size =</span> <span class="fl">0.2</span>, <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb3-74"><a href="tidytuesday.html#cb3-74" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="dv">11</span>, <span class="at">y =</span> <span class="fl">0.8</span>, <span class="at">label =</span> <span class="st">&quot;One year of</span><span class="sc">\n</span><span class="st">collisions in October&quot;</span>, <span class="at">family =</span> <span class="st">&quot;Scope One&quot;</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">hjust =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb3-75"><a href="tidytuesday.html#cb3-75" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;segment&quot;</span>, <span class="at">x =</span> <span class="fl">10.8</span>, <span class="at">y =</span> <span class="fl">0.8</span>, <span class="at">xend =</span> <span class="dv">10</span>, <span class="at">yend =</span> <span class="fl">0.8</span>, <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="fl">0.2</span>, <span class="st">&quot;cm&quot;</span>))) <span class="sc">+</span></span>
+<span id="cb3-76"><a href="tidytuesday.html#cb3-76" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="fl">3.5</span>, <span class="at">y =</span> <span class="fl">0.8</span>, <span class="at">label =</span> <span class="st">&quot;Multiple years of</span><span class="sc">\n</span><span class="st">collisions in May&quot;</span>, <span class="at">family =</span> <span class="st">&quot;Scope One&quot;</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb3-77"><a href="tidytuesday.html#cb3-77" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;segment&quot;</span>, <span class="at">x =</span> <span class="fl">3.8</span>, <span class="at">y =</span> <span class="fl">0.8</span>, <span class="at">xend =</span> <span class="dv">5</span>, <span class="at">yend =</span> <span class="fl">0.8</span>, <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="fl">0.2</span>, <span class="st">&quot;cm&quot;</span>))) <span class="sc">+</span></span>
+<span id="cb3-78"><a href="tidytuesday.html#cb3-78" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> month.abb, <span class="at">breaks =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="cb3-79"><a href="tidytuesday.html#cb3-79" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">breaks =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.1</span>)) <span class="sc">+</span></span>
+<span id="cb3-80"><a href="tidytuesday.html#cb3-80" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_d</span>(<span class="st">&quot;Year&quot;</span>, <span class="at">option =</span> <span class="st">&quot;plasma&quot;</span>, <span class="at">direction =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb3-81"><a href="tidytuesday.html#cb3-81" tabindex="-1"></a>  <span class="fu">scale_color_viridis_d</span>(<span class="at">option =</span> <span class="st">&quot;plasma&quot;</span>, <span class="at">direction =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb3-82"><a href="tidytuesday.html#cb3-82" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb3-83"><a href="tidytuesday.html#cb3-83" tabindex="-1"></a>    <span class="at">x =</span> <span class="cn">NULL</span>,</span>
+<span id="cb3-84"><a href="tidytuesday.html#cb3-84" tabindex="-1"></a>    <span class="at">y =</span> <span class="cn">NULL</span>,</span>
+<span id="cb3-85"><a href="tidytuesday.html#cb3-85" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;How to Interpret This Chart&quot;</span>,</span>
+<span id="cb3-86"><a href="tidytuesday.html#cb3-86" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="fu">str_wrap</span>(<span class="st">&quot;A flower represents the recorded total collisions of each bird species with the individual petals representing the normalized events during each year (from 0-1).  The position of the petals indicates the month or months collisions occur, with overlaps indicating repeated year-over-year collisions.&quot;</span>, <span class="dv">70</span>)</span>
+<span id="cb3-87"><a href="tidytuesday.html#cb3-87" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb3-88"><a href="tidytuesday.html#cb3-88" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_colorbar</span>()) <span class="sc">+</span></span>
+<span id="cb3-89"><a href="tidytuesday.html#cb3-89" tabindex="-1"></a>  <span class="fu">coord_polar</span>(<span class="at">theta =</span> <span class="st">&quot;x&quot;</span>, <span class="at">start =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb3-90"><a href="tidytuesday.html#cb3-90" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb3-91"><a href="tidytuesday.html#cb3-91" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb3-92"><a href="tidytuesday.html#cb3-92" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb3-93"><a href="tidytuesday.html#cb3-93" tabindex="-1"></a>    <span class="at">panel.grid.major.y =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">&quot;#cccccc&quot;</span>, <span class="at">size =</span> <span class="fl">0.10</span>),</span>
+<span id="cb3-94"><a href="tidytuesday.html#cb3-94" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">size =</span> <span class="dv">14</span>, <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">b =</span> <span class="dv">10</span>)),</span>
+<span id="cb3-95"><a href="tidytuesday.html#cb3-95" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span></span>
+<span id="cb3-96"><a href="tidytuesday.html#cb3-96" tabindex="-1"></a>  )</span>
+<span id="cb3-97"><a href="tidytuesday.html#cb3-97" tabindex="-1"></a></span>
+<span id="cb3-98"><a href="tidytuesday.html#cb3-98" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">wrap_plots</span>(flower <span class="sc">/</span> legend, <span class="fu">plot_spacer</span>(), petals, <span class="at">ncol =</span> <span class="dv">3</span>, <span class="at">widths =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.2</span>, <span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb3-99"><a href="tidytuesday.html#cb3-99" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(</span>
+<span id="cb3-100"><a href="tidytuesday.html#cb3-100" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Seasonality of Bird Collisions in Chicago&quot;</span>,</span>
+<span id="cb3-101"><a href="tidytuesday.html#cb3-101" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="fu">str_wrap</span>(<span class="st">&quot;Presented below is a petal chart of of bird collisions, with instructions on how to interpret this chart in the lower left. The upper left flower represents collisions recorded across all years and species, with individual species presented as small multiple flowers on the right.&quot;</span>, <span class="dv">220</span>),</span>
+<span id="cb3-102"><a href="tidytuesday.html#cb3-102" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">&quot;Data: Winger et al. (2019) Nocturnal flight-calling behaviour predicts vulnerability to artificial light in migratory birds. Proceedings of the Royal Society B 286(1900): 20190364. https://doi.org/10.1098/rspb.2019.0364 | Graphic: @jakekaupp&quot;</span>,</span>
+<span id="cb3-103"><a href="tidytuesday.html#cb3-103" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title.position =</span> <span class="st">&quot;plot&quot;</span>)</span>
+<span id="cb3-104"><a href="tidytuesday.html#cb3-104" tabindex="-1"></a>  )</span></code></pre></div>
+</details>
+<p><br></p>
+<ul>
+<li>Georgios Karamanis’ visualization of instant ramen reviews:
 <a href="https://github.com/gkaramanis/tidytuesday/tree/master/2019/2019-week-23">
 <img src="images/tidy_tuesday_georgios_karamanis_ramen.png" width="60%" style="display: block; margin: auto;" />
-</a></p></li>
-<li><p>Georgios Karamanis’ histogram of UFO sightings:
+</a></li>
+</ul>
+<details>
+<summary>
+I want to see the source code!
+</summary>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="tidytuesday.html#cb4-1" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse)</span>
+<span id="cb4-2"><a href="tidytuesday.html#cb4-2" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="tidytuesday.html#cb4-3" tabindex="-1"></a>ramen_ratings <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-06-04/ramen_ratings.csv&quot;</span>)</span>
+<span id="cb4-4"><a href="tidytuesday.html#cb4-4" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="tidytuesday.html#cb4-5" tabindex="-1"></a>shio <span class="ot">&lt;-</span> ramen_ratings <span class="sc">%&gt;%</span></span>
+<span id="cb4-6"><a href="tidytuesday.html#cb4-6" tabindex="-1"></a>  <span class="fu">filter</span>(country <span class="sc">==</span> <span class="st">&quot;Japan&quot;</span>, <span class="fu">str_detect</span>(variety, <span class="st">&quot;Shio&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-7"><a href="tidytuesday.html#cb4-7" tabindex="-1"></a>  <span class="fu">arrange</span>(., stars) <span class="sc">%&gt;%</span></span>
+<span id="cb4-8"><a href="tidytuesday.html#cb4-8" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">n =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>())</span>
+<span id="cb4-9"><a href="tidytuesday.html#cb4-9" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="tidytuesday.html#cb4-10" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb4-11"><a href="tidytuesday.html#cb4-11" tabindex="-1"></a>  <span class="co"># chopstics</span></span>
+<span id="cb4-12"><a href="tidytuesday.html#cb4-12" tabindex="-1"></a>  <span class="fu">geom_polygon</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">30</span>, <span class="dv">32</span>, <span class="dv">32</span>, <span class="sc">-</span><span class="dv">30</span>), <span class="at">y =</span> <span class="fu">c</span>(<span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">0.1</span>, <span class="fl">0.3</span>)),</span>
+<span id="cb4-13"><a href="tidytuesday.html#cb4-13" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">&quot;firebrick4&quot;</span></span>
+<span id="cb4-14"><a href="tidytuesday.html#cb4-14" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb4-15"><a href="tidytuesday.html#cb4-15" tabindex="-1"></a>  <span class="fu">geom_polygon</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">30</span>, <span class="dv">32</span>, <span class="dv">32</span>, <span class="sc">-</span><span class="dv">30</span>), <span class="at">y =</span> <span class="fu">c</span>(<span class="fl">0.35</span>, <span class="fl">0.12</span>, <span class="fl">0.2</span>, <span class="fl">0.63</span>)),</span>
+<span id="cb4-16"><a href="tidytuesday.html#cb4-16" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">&quot;firebrick4&quot;</span></span>
+<span id="cb4-17"><a href="tidytuesday.html#cb4-17" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb4-18"><a href="tidytuesday.html#cb4-18" tabindex="-1"></a>  <span class="co"># stars</span></span>
+<span id="cb4-19"><a href="tidytuesday.html#cb4-19" tabindex="-1"></a>  <span class="fu">geom_text</span>(</span>
+<span id="cb4-20"><a href="tidytuesday.html#cb4-20" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb4-21"><a href="tidytuesday.html#cb4-21" tabindex="-1"></a>      <span class="at">x =</span> <span class="sc">-</span><span class="dv">20</span>, <span class="at">y =</span> <span class="fu">c</span>(<span class="fl">1.1</span>, <span class="fl">2.1</span>, <span class="fl">3.1</span>, <span class="fl">4.1</span>, <span class="fl">5.1</span>),</span>
+<span id="cb4-22"><a href="tidytuesday.html#cb4-22" tabindex="-1"></a>      <span class="at">label =</span> <span class="fu">c</span>(<span class="st">&quot;1 star&quot;</span>, <span class="st">&quot;2 stars&quot;</span>, <span class="st">&quot;3 stars&quot;</span>, <span class="st">&quot;4 stars&quot;</span>, <span class="st">&quot;5 stars&quot;</span>)</span>
+<span id="cb4-23"><a href="tidytuesday.html#cb4-23" tabindex="-1"></a>    ),</span>
+<span id="cb4-24"><a href="tidytuesday.html#cb4-24" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&quot;gray85&quot;</span>, <span class="at">size =</span> <span class="dv">2</span>, <span class="at">hjust =</span> <span class="dv">0</span>,</span>
+<span id="cb4-25"><a href="tidytuesday.html#cb4-25" tabindex="-1"></a>    <span class="at">family =</span> <span class="st">&quot;IBM Plex Mono&quot;</span></span>
+<span id="cb4-26"><a href="tidytuesday.html#cb4-26" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb4-27"><a href="tidytuesday.html#cb4-27" tabindex="-1"></a>  <span class="fu">geom_segment</span>(</span>
+<span id="cb4-28"><a href="tidytuesday.html#cb4-28" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb4-29"><a href="tidytuesday.html#cb4-29" tabindex="-1"></a>      <span class="at">x =</span> <span class="sc">-</span><span class="dv">20</span>, <span class="at">y =</span> <span class="fu">c</span>(<span class="fl">0.99</span>, <span class="fl">1.99</span>, <span class="fl">2.99</span>, <span class="fl">3.99</span>, <span class="fl">4.99</span>),</span>
+<span id="cb4-30"><a href="tidytuesday.html#cb4-30" tabindex="-1"></a>      <span class="at">xend =</span> <span class="fu">c</span>(<span class="fl">0.6</span>, <span class="fl">1.6</span>, <span class="fl">3.6</span>, <span class="fl">9.6</span>, <span class="fl">23.6</span>), <span class="at">yend =</span> <span class="fu">c</span>(<span class="fl">0.99</span>, <span class="fl">1.99</span>, <span class="fl">2.99</span>, <span class="fl">3.99</span>, <span class="fl">4.99</span>)</span>
+<span id="cb4-31"><a href="tidytuesday.html#cb4-31" tabindex="-1"></a>    ),</span>
+<span id="cb4-32"><a href="tidytuesday.html#cb4-32" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&quot;gray85&quot;</span>, <span class="at">size =</span> <span class="fl">0.3</span>, <span class="at">alpha =</span> <span class="fl">0.5</span></span>
+<span id="cb4-33"><a href="tidytuesday.html#cb4-33" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb4-34"><a href="tidytuesday.html#cb4-34" tabindex="-1"></a>  <span class="co"># 5 starred</span></span>
+<span id="cb4-35"><a href="tidytuesday.html#cb4-35" tabindex="-1"></a>  <span class="fu">geom_text</span>(</span>
+<span id="cb4-36"><a href="tidytuesday.html#cb4-36" tabindex="-1"></a>    <span class="at">data =</span> shio, <span class="fu">aes</span>(</span>
+<span id="cb4-37"><a href="tidytuesday.html#cb4-37" tabindex="-1"></a>      <span class="at">x =</span> n, <span class="at">y =</span> <span class="sc">-</span><span class="fl">0.2</span>,</span>
+<span id="cb4-38"><a href="tidytuesday.html#cb4-38" tabindex="-1"></a>      <span class="at">label =</span> <span class="fu">paste</span>(brand, variety, <span class="at">sep =</span> <span class="st">&quot; - &quot;</span>)</span>
+<span id="cb4-39"><a href="tidytuesday.html#cb4-39" tabindex="-1"></a>    ),</span>
+<span id="cb4-40"><a href="tidytuesday.html#cb4-40" tabindex="-1"></a>    <span class="at">size =</span> <span class="fl">1.8</span>, <span class="at">family =</span> <span class="st">&quot;IBM Plex Sans&quot;</span>,</span>
+<span id="cb4-41"><a href="tidytuesday.html#cb4-41" tabindex="-1"></a>    <span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">color =</span> <span class="st">&quot;gray85&quot;</span></span>
+<span id="cb4-42"><a href="tidytuesday.html#cb4-42" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb4-43"><a href="tidytuesday.html#cb4-43" tabindex="-1"></a>  <span class="co"># ramen</span></span>
+<span id="cb4-44"><a href="tidytuesday.html#cb4-44" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">data =</span> shio, <span class="fu">aes</span>(n, stars), <span class="at">width =</span> <span class="fl">0.5</span>, <span class="at">fill =</span> <span class="st">&quot;khaki&quot;</span>) <span class="sc">+</span></span>
+<span id="cb4-45"><a href="tidytuesday.html#cb4-45" tabindex="-1"></a>  <span class="fu">scale_y_reverse</span>(</span>
+<span id="cb4-46"><a href="tidytuesday.html#cb4-46" tabindex="-1"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">8</span>, <span class="sc">-</span><span class="dv">5</span>), <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>),</span>
+<span id="cb4-47"><a href="tidytuesday.html#cb4-47" tabindex="-1"></a>    <span class="at">position =</span> <span class="st">&quot;right&quot;</span></span>
+<span id="cb4-48"><a href="tidytuesday.html#cb4-48" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb4-49"><a href="tidytuesday.html#cb4-49" tabindex="-1"></a>  <span class="co"># title, subtitle and caption</span></span>
+<span id="cb4-50"><a href="tidytuesday.html#cb4-50" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">32</span>, <span class="at">y =</span> <span class="fl">7.4</span>, <span class="at">label =</span> <span class="st">&quot;Ratings of Japanese Instant Shio Ramen&quot;</span>),</span>
+<span id="cb4-51"><a href="tidytuesday.html#cb4-51" tabindex="-1"></a>    <span class="at">family =</span> <span class="st">&quot;IBM Plex Serif SemiBold&quot;</span>, <span class="at">hjust =</span> <span class="dv">1</span>,</span>
+<span id="cb4-52"><a href="tidytuesday.html#cb4-52" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&quot;white&quot;</span>, <span class="at">size =</span> <span class="fl">4.5</span></span>
+<span id="cb4-53"><a href="tidytuesday.html#cb4-53" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb4-54"><a href="tidytuesday.html#cb4-54" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">32</span>, <span class="at">y =</span> <span class="fl">7.8</span>, <span class="at">label =</span> <span class="st">&quot;Source: TheRamenRater.com | Graphic: Georgios Karamanis&quot;</span>),</span>
+<span id="cb4-55"><a href="tidytuesday.html#cb4-55" tabindex="-1"></a>    <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">color =</span> <span class="st">&quot;white&quot;</span>, <span class="at">size =</span> <span class="dv">3</span></span>
+<span id="cb4-56"><a href="tidytuesday.html#cb4-56" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb4-57"><a href="tidytuesday.html#cb4-57" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb4-58"><a href="tidytuesday.html#cb4-58" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb4-59"><a href="tidytuesday.html#cb4-59" tabindex="-1"></a>    <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">&quot;#0881A3&quot;</span>, <span class="at">color =</span> <span class="st">&quot;#0881A3&quot;</span>)</span>
+<span id="cb4-60"><a href="tidytuesday.html#cb4-60" tabindex="-1"></a>  )</span></code></pre></div>
+</details>
+<p><br></p>
+<ul>
+<li>Georgios Karamanis’ histogram of UFO sightings:
 <a href="https://github.com/gkaramanis/tidytuesday/tree/master/2019/2019-week-26">
 <img src="images/tidy_tuesday_georgios_karamanis_ufo.png" width="60%" style="display: block; margin: auto;" />
-</a></p></li>
-<li><p>Dr. Torsten Sprenger’s visualizations of the gender bias in scientific publishing:
+</a></li>
+</ul>
+<details>
+<summary>
+I want to see the source code!
+</summary>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="tidytuesday.html#cb5-1" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, here, ggimage)</span>
+<span id="cb5-2"><a href="tidytuesday.html#cb5-2" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="tidytuesday.html#cb5-3" tabindex="-1"></a>ufo_sightings <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-06-25/ufo_sightings.csv&quot;</span>)</span>
+<span id="cb5-4"><a href="tidytuesday.html#cb5-4" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="tidytuesday.html#cb5-5" tabindex="-1"></a>city_count <span class="ot">&lt;-</span> ufo_sightings <span class="sc">%&gt;%</span></span>
+<span id="cb5-6"><a href="tidytuesday.html#cb5-6" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">every_year =</span> <span class="fu">str_sub</span>(date_time, <span class="sc">-</span><span class="dv">10</span>, <span class="sc">-</span><span class="dv">7</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-7"><a href="tidytuesday.html#cb5-7" tabindex="-1"></a>  <span class="fu">group_by</span>(city_area) <span class="sc">%&gt;%</span></span>
+<span id="cb5-8"><a href="tidytuesday.html#cb5-8" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total =</span> <span class="fu">n</span>(), <span class="at">first_encounter =</span> <span class="fu">min</span>(every_year)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-9"><a href="tidytuesday.html#cb5-9" tabindex="-1"></a>  <span class="fu">top_n</span>(<span class="at">n =</span> <span class="dv">10</span>, total) <span class="sc">%&gt;%</span></span>
+<span id="cb5-10"><a href="tidytuesday.html#cb5-10" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb5-11"><a href="tidytuesday.html#cb5-11" tabindex="-1"></a>    <span class="at">year =</span> <span class="fu">as.numeric</span>(first_encounter),</span>
+<span id="cb5-12"><a href="tidytuesday.html#cb5-12" tabindex="-1"></a>    <span class="at">city_area =</span> <span class="fu">str_to_title</span>(city_area),</span>
+<span id="cb5-13"><a href="tidytuesday.html#cb5-13" tabindex="-1"></a>    <span class="at">city_area =</span> <span class="fu">fct_reorder</span>(city_area, year)</span>
+<span id="cb5-14"><a href="tidytuesday.html#cb5-14" tabindex="-1"></a>  )</span>
+<span id="cb5-15"><a href="tidytuesday.html#cb5-15" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="tidytuesday.html#cb5-16" tabindex="-1"></a><span class="fu">ggplot</span>(city_count) <span class="sc">+</span></span>
+<span id="cb5-17"><a href="tidytuesday.html#cb5-17" tabindex="-1"></a>  <span class="fu">geom_segment</span>(</span>
+<span id="cb5-18"><a href="tidytuesday.html#cb5-18" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb5-19"><a href="tidytuesday.html#cb5-19" tabindex="-1"></a>      <span class="at">x =</span> city_area, <span class="at">y =</span> year,</span>
+<span id="cb5-20"><a href="tidytuesday.html#cb5-20" tabindex="-1"></a>      <span class="at">xend =</span> city_area, <span class="at">yend =</span> <span class="dv">1970</span>,</span>
+<span id="cb5-21"><a href="tidytuesday.html#cb5-21" tabindex="-1"></a>      <span class="at">size =</span> total</span>
+<span id="cb5-22"><a href="tidytuesday.html#cb5-22" tabindex="-1"></a>    ),</span>
+<span id="cb5-23"><a href="tidytuesday.html#cb5-23" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&quot;orange1&quot;</span></span>
+<span id="cb5-24"><a href="tidytuesday.html#cb5-24" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb5-25"><a href="tidytuesday.html#cb5-25" tabindex="-1"></a>  <span class="fu">geom_image</span>(</span>
+<span id="cb5-26"><a href="tidytuesday.html#cb5-26" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb5-27"><a href="tidytuesday.html#cb5-27" tabindex="-1"></a>      <span class="at">image =</span> <span class="fu">here</span>(<span class="st">&quot;images&quot;</span>, <span class="st">&quot;UFO_image.png&quot;</span>),</span>
+<span id="cb5-28"><a href="tidytuesday.html#cb5-28" tabindex="-1"></a>      <span class="at">x =</span> city_area, <span class="at">y =</span> year <span class="sc">-</span> <span class="fl">0.8</span></span>
+<span id="cb5-29"><a href="tidytuesday.html#cb5-29" tabindex="-1"></a>    ),</span>
+<span id="cb5-30"><a href="tidytuesday.html#cb5-30" tabindex="-1"></a>    <span class="at">asp =</span> <span class="fl">1.4</span>, <span class="at">size =</span> <span class="fl">0.05</span>, <span class="at">color =</span> <span class="st">&quot;purple3&quot;</span></span>
+<span id="cb5-31"><a href="tidytuesday.html#cb5-31" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb5-32"><a href="tidytuesday.html#cb5-32" tabindex="-1"></a>  <span class="fu">geom_text</span>(</span>
+<span id="cb5-33"><a href="tidytuesday.html#cb5-33" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb5-34"><a href="tidytuesday.html#cb5-34" tabindex="-1"></a>      <span class="at">label =</span> year,</span>
+<span id="cb5-35"><a href="tidytuesday.html#cb5-35" tabindex="-1"></a>      <span class="at">x =</span> city_area, <span class="at">y =</span> year <span class="sc">-</span> <span class="dv">3</span></span>
+<span id="cb5-36"><a href="tidytuesday.html#cb5-36" tabindex="-1"></a>    ),</span>
+<span id="cb5-37"><a href="tidytuesday.html#cb5-37" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&quot;grey40&quot;</span>,</span>
+<span id="cb5-38"><a href="tidytuesday.html#cb5-38" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">5</span>, <span class="at">alpha =</span> <span class="fl">0.6</span></span>
+<span id="cb5-39"><a href="tidytuesday.html#cb5-39" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb5-40"><a href="tidytuesday.html#cb5-40" tabindex="-1"></a>  <span class="fu">geom_text</span>(</span>
+<span id="cb5-41"><a href="tidytuesday.html#cb5-41" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb5-42"><a href="tidytuesday.html#cb5-42" tabindex="-1"></a>      <span class="at">label =</span> total,</span>
+<span id="cb5-43"><a href="tidytuesday.html#cb5-43" tabindex="-1"></a>      <span class="at">x =</span> city_area, <span class="at">y =</span> <span class="fl">1967.5</span></span>
+<span id="cb5-44"><a href="tidytuesday.html#cb5-44" tabindex="-1"></a>    ),</span>
+<span id="cb5-45"><a href="tidytuesday.html#cb5-45" tabindex="-1"></a>    <span class="at">nudge_x =</span> <span class="fl">0.37</span>, <span class="at">size =</span> <span class="dv">8</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>,</span>
+<span id="cb5-46"><a href="tidytuesday.html#cb5-46" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&quot;orange1&quot;</span></span>
+<span id="cb5-47"><a href="tidytuesday.html#cb5-47" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb5-48"><a href="tidytuesday.html#cb5-48" tabindex="-1"></a>  <span class="fu">geom_text</span>(</span>
+<span id="cb5-49"><a href="tidytuesday.html#cb5-49" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb5-50"><a href="tidytuesday.html#cb5-50" tabindex="-1"></a>      <span class="at">label =</span> <span class="st">&quot;year of first reported</span><span class="sc">\n</span><span class="st">encounter at the city&quot;</span>,</span>
+<span id="cb5-51"><a href="tidytuesday.html#cb5-51" tabindex="-1"></a>      <span class="at">x =</span> <span class="dv">3</span>, <span class="at">y =</span> <span class="dv">1941</span></span>
+<span id="cb5-52"><a href="tidytuesday.html#cb5-52" tabindex="-1"></a>    ),</span>
+<span id="cb5-53"><a href="tidytuesday.html#cb5-53" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&quot;grey60&quot;</span>,</span>
+<span id="cb5-54"><a href="tidytuesday.html#cb5-54" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">5</span>, <span class="at">alpha =</span> <span class="fl">0.9</span>, <span class="at">hjust =</span> <span class="dv">0</span></span>
+<span id="cb5-55"><a href="tidytuesday.html#cb5-55" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb5-56"><a href="tidytuesday.html#cb5-56" tabindex="-1"></a>  <span class="fu">geom_segment</span>(</span>
+<span id="cb5-57"><a href="tidytuesday.html#cb5-57" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb5-58"><a href="tidytuesday.html#cb5-58" tabindex="-1"></a>      <span class="at">x =</span> <span class="fl">2.8</span>, <span class="at">y =</span> <span class="dv">1941</span>,</span>
+<span id="cb5-59"><a href="tidytuesday.html#cb5-59" tabindex="-1"></a>      <span class="at">xend =</span> <span class="fl">1.4</span>, <span class="at">yend =</span> <span class="dv">1941</span></span>
+<span id="cb5-60"><a href="tidytuesday.html#cb5-60" tabindex="-1"></a>    ),</span>
+<span id="cb5-61"><a href="tidytuesday.html#cb5-61" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&quot;grey60&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.5</span></span>
+<span id="cb5-62"><a href="tidytuesday.html#cb5-62" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb5-63"><a href="tidytuesday.html#cb5-63" tabindex="-1"></a>  <span class="fu">geom_text</span>(</span>
+<span id="cb5-64"><a href="tidytuesday.html#cb5-64" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb5-65"><a href="tidytuesday.html#cb5-65" tabindex="-1"></a>      <span class="at">label =</span> <span class="st">&quot;total number of encounters</span><span class="sc">\n</span><span class="st">during all years&quot;</span>,</span>
+<span id="cb5-66"><a href="tidytuesday.html#cb5-66" tabindex="-1"></a>      <span class="at">x =</span> <span class="dv">8</span>, <span class="at">y =</span> <span class="dv">1950</span></span>
+<span id="cb5-67"><a href="tidytuesday.html#cb5-67" tabindex="-1"></a>    ),</span>
+<span id="cb5-68"><a href="tidytuesday.html#cb5-68" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&quot;orange1&quot;</span>,</span>
+<span id="cb5-69"><a href="tidytuesday.html#cb5-69" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">5</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">hjust =</span> <span class="dv">0</span></span>
+<span id="cb5-70"><a href="tidytuesday.html#cb5-70" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb5-71"><a href="tidytuesday.html#cb5-71" tabindex="-1"></a>  <span class="fu">geom_segment</span>(</span>
+<span id="cb5-72"><a href="tidytuesday.html#cb5-72" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb5-73"><a href="tidytuesday.html#cb5-73" tabindex="-1"></a>      <span class="at">x =</span> <span class="fl">7.8</span>, <span class="at">y =</span> <span class="dv">1950</span>,</span>
+<span id="cb5-74"><a href="tidytuesday.html#cb5-74" tabindex="-1"></a>      <span class="at">xend =</span> <span class="fl">6.4</span>, <span class="at">yend =</span> <span class="dv">1955</span></span>
+<span id="cb5-75"><a href="tidytuesday.html#cb5-75" tabindex="-1"></a>    ),</span>
+<span id="cb5-76"><a href="tidytuesday.html#cb5-76" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&quot;orange1&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.2</span></span>
+<span id="cb5-77"><a href="tidytuesday.html#cb5-77" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb5-78"><a href="tidytuesday.html#cb5-78" tabindex="-1"></a>  <span class="fu">scale_y_reverse</span>(<span class="at">position =</span> <span class="st">&quot;right&quot;</span>) <span class="sc">+</span></span>
+<span id="cb5-79"><a href="tidytuesday.html#cb5-79" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">1940</span>, <span class="dv">1967</span>)) <span class="sc">+</span></span>
+<span id="cb5-80"><a href="tidytuesday.html#cb5-80" tabindex="-1"></a>  <span class="fu">geom_text</span>(</span>
+<span id="cb5-81"><a href="tidytuesday.html#cb5-81" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb5-82"><a href="tidytuesday.html#cb5-82" tabindex="-1"></a>      <span class="at">label =</span> <span class="st">&quot;Top 10 cities in the world with</span><span class="sc">\n</span><span class="st">the most reported UFO encounters&quot;</span>,</span>
+<span id="cb5-83"><a href="tidytuesday.html#cb5-83" tabindex="-1"></a>      <span class="at">x =</span> <span class="dv">11</span>, <span class="at">y =</span> <span class="dv">1941</span></span>
+<span id="cb5-84"><a href="tidytuesday.html#cb5-84" tabindex="-1"></a>    ),</span>
+<span id="cb5-85"><a href="tidytuesday.html#cb5-85" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">8</span>, <span class="at">hjust =</span> <span class="dv">1</span></span>
+<span id="cb5-86"><a href="tidytuesday.html#cb5-86" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb5-87"><a href="tidytuesday.html#cb5-87" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb5-88"><a href="tidytuesday.html#cb5-88" tabindex="-1"></a>    <span class="co"># title = &quot;Top 10 cities\nin the world with\nthe most reported\nUFO encounters&quot;,</span></span>
+<span id="cb5-89"><a href="tidytuesday.html#cb5-89" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">&quot;Source: NUFORC | Graphics: Georgios Karamanis&quot;</span></span>
+<span id="cb5-90"><a href="tidytuesday.html#cb5-90" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb5-91"><a href="tidytuesday.html#cb5-91" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb5-92"><a href="tidytuesday.html#cb5-92" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb5-93"><a href="tidytuesday.html#cb5-93" tabindex="-1"></a>    <span class="at">plot.background =</span> <span class="fu">element_rect</span>(</span>
+<span id="cb5-94"><a href="tidytuesday.html#cb5-94" tabindex="-1"></a>      <span class="at">fill =</span> <span class="st">&quot;#e0e7f3&quot;</span>,</span>
+<span id="cb5-95"><a href="tidytuesday.html#cb5-95" tabindex="-1"></a>      <span class="at">colour =</span> <span class="st">&quot;#e0e7f3&quot;</span></span>
+<span id="cb5-96"><a href="tidytuesday.html#cb5-96" tabindex="-1"></a>    ),</span>
+<span id="cb5-97"><a href="tidytuesday.html#cb5-97" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb5-98"><a href="tidytuesday.html#cb5-98" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb5-99"><a href="tidytuesday.html#cb5-99" tabindex="-1"></a>    <span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb5-100"><a href="tidytuesday.html#cb5-100" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb5-101"><a href="tidytuesday.html#cb5-101" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb5-102"><a href="tidytuesday.html#cb5-102" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">hjust =</span> <span class="fl">0.2</span>, <span class="at">color =</span> <span class="st">&quot;purple3&quot;</span>),</span>
+<span id="cb5-103"><a href="tidytuesday.html#cb5-103" tabindex="-1"></a>    <span class="at">plot.margin =</span> <span class="fu">unit</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb5-104"><a href="tidytuesday.html#cb5-104" tabindex="-1"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">margin =</span> <span class="fu">margin</span>(<span class="dv">40</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="at">color =</span> <span class="st">&quot;grey60&quot;</span>)</span>
+<span id="cb5-105"><a href="tidytuesday.html#cb5-105" tabindex="-1"></a>  )</span></code></pre></div>
+</details>
+<p><br></p>
+<ul>
+<li>Dr. Torsten Sprenger’s visualizations of the gender bias in scientific publishing:
 <a href="https://github.com/spren9er/tidytuesday/blob/master/tidytuesday_201916_new_economist.r">
 <img src="images/tidy_tuesday_torsten_sprenger.png" width="60%" style="display: block; margin: auto;" />
-</a></p></li>
+</a></li>
 </ul>
+<details>
+<summary>
+I want to see the source code!
+</summary>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="tidytuesday.html#cb6-1" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse)</span>
+<span id="cb6-2"><a href="tidytuesday.html#cb6-2" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="tidytuesday.html#cb6-3" tabindex="-1"></a>raw_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(</span>
+<span id="cb6-4"><a href="tidytuesday.html#cb6-4" tabindex="-1"></a>  <span class="fu">paste0</span>(</span>
+<span id="cb6-5"><a href="tidytuesday.html#cb6-5" tabindex="-1"></a>    <span class="st">&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/&quot;</span>,</span>
+<span id="cb6-6"><a href="tidytuesday.html#cb6-6" tabindex="-1"></a>    <span class="st">&quot;master/data/2019/2019-04-16/women_research.csv&quot;</span></span>
+<span id="cb6-7"><a href="tidytuesday.html#cb6-7" tabindex="-1"></a>  )</span>
+<span id="cb6-8"><a href="tidytuesday.html#cb6-8" tabindex="-1"></a>)</span>
+<span id="cb6-9"><a href="tidytuesday.html#cb6-9" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="tidytuesday.html#cb6-10" tabindex="-1"></a>women_research <span class="ot">&lt;-</span> raw_data <span class="sc">%&gt;%</span></span>
+<span id="cb6-11"><a href="tidytuesday.html#cb6-11" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb6-12"><a href="tidytuesday.html#cb6-12" tabindex="-1"></a>    <span class="at">field =</span> <span class="fu">gsub</span>(<span class="st">&quot;Women Inventores&quot;</span>, <span class="st">&quot;Inventors&quot;</span>, <span class="fu">str_to_title</span>(field)),</span>
+<span id="cb6-13"><a href="tidytuesday.html#cb6-13" tabindex="-1"></a>    <span class="at">percent_men =</span> <span class="dv">1</span> <span class="sc">-</span> percent_women,</span>
+<span id="cb6-14"><a href="tidytuesday.html#cb6-14" tabindex="-1"></a>    <span class="at">women_ratio =</span> <span class="fu">ifelse</span>(percent_women <span class="sc">&lt;</span> percent_men, <span class="st">&quot;less&quot;</span>, <span class="st">&quot;not_less&quot;</span>)</span>
+<span id="cb6-15"><a href="tidytuesday.html#cb6-15" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb6-16"><a href="tidytuesday.html#cb6-16" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb6-17"><a href="tidytuesday.html#cb6-17" tabindex="-1"></a>    <span class="fu">starts_with</span>(<span class="st">&quot;percent&quot;</span>),</span>
+<span id="cb6-18"><a href="tidytuesday.html#cb6-18" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">&quot;sex&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;percent&quot;</span>,</span>
+<span id="cb6-19"><a href="tidytuesday.html#cb6-19" tabindex="-1"></a>    <span class="at">names_prefix =</span> <span class="st">&quot;percent_&quot;</span></span>
+<span id="cb6-20"><a href="tidytuesday.html#cb6-20" tabindex="-1"></a>  )</span>
+<span id="cb6-21"><a href="tidytuesday.html#cb6-21" tabindex="-1"></a></span>
+<span id="cb6-22"><a href="tidytuesday.html#cb6-22" tabindex="-1"></a>women_field_averages <span class="ot">&lt;-</span> women_research <span class="sc">%&gt;%</span></span>
+<span id="cb6-23"><a href="tidytuesday.html#cb6-23" tabindex="-1"></a>  <span class="fu">filter</span>(sex <span class="sc">==</span> <span class="st">&quot;women&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-24"><a href="tidytuesday.html#cb6-24" tabindex="-1"></a>  <span class="fu">group_by</span>(field) <span class="sc">%&gt;%</span></span>
+<span id="cb6-25"><a href="tidytuesday.html#cb6-25" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_field_percent =</span> <span class="fu">mean</span>(percent)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-26"><a href="tidytuesday.html#cb6-26" tabindex="-1"></a>  <span class="fu">arrange</span>(avg_field_percent)</span>
+<span id="cb6-27"><a href="tidytuesday.html#cb6-27" tabindex="-1"></a></span>
+<span id="cb6-28"><a href="tidytuesday.html#cb6-28" tabindex="-1"></a>women_country_averages <span class="ot">&lt;-</span> women_research <span class="sc">%&gt;%</span></span>
+<span id="cb6-29"><a href="tidytuesday.html#cb6-29" tabindex="-1"></a>  <span class="fu">filter</span>(sex <span class="sc">==</span> <span class="st">&quot;women&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-30"><a href="tidytuesday.html#cb6-30" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span></span>
+<span id="cb6-31"><a href="tidytuesday.html#cb6-31" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_country_percent =</span> <span class="fu">mean</span>(percent)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-32"><a href="tidytuesday.html#cb6-32" tabindex="-1"></a>  <span class="fu">arrange</span>(avg_country_percent)</span>
+<span id="cb6-33"><a href="tidytuesday.html#cb6-33" tabindex="-1"></a></span>
+<span id="cb6-34"><a href="tidytuesday.html#cb6-34" tabindex="-1"></a>plot <span class="ot">&lt;-</span> women_research <span class="sc">%&gt;%</span></span>
+<span id="cb6-35"><a href="tidytuesday.html#cb6-35" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb6-36"><a href="tidytuesday.html#cb6-36" tabindex="-1"></a>    <span class="at">field =</span> <span class="fu">factor</span>(field, <span class="at">levels =</span> women_field_averages<span class="sc">$</span>field),</span>
+<span id="cb6-37"><a href="tidytuesday.html#cb6-37" tabindex="-1"></a>    <span class="at">country =</span> <span class="fu">factor</span>(country, <span class="at">levels =</span> women_country_averages<span class="sc">$</span>country),</span>
+<span id="cb6-38"><a href="tidytuesday.html#cb6-38" tabindex="-1"></a>    <span class="at">sex_women_ratio =</span> <span class="fu">interaction</span>(sex, women_ratio)</span>
+<span id="cb6-39"><a href="tidytuesday.html#cb6-39" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb6-40"><a href="tidytuesday.html#cb6-40" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb6-41"><a href="tidytuesday.html#cb6-41" tabindex="-1"></a>  <span class="fu">geom_bar</span>(</span>
+<span id="cb6-42"><a href="tidytuesday.html#cb6-42" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> percent, <span class="at">fill =</span> sex_women_ratio, <span class="at">color =</span> women_ratio),</span>
+<span id="cb6-43"><a href="tidytuesday.html#cb6-43" tabindex="-1"></a>    <span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="at">show.legend =</span> <span class="cn">FALSE</span></span>
+<span id="cb6-44"><a href="tidytuesday.html#cb6-44" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb6-45"><a href="tidytuesday.html#cb6-45" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;#efefef&quot;</span>, <span class="st">&quot;#333333&quot;</span>, <span class="st">&quot;#efefef&quot;</span>, <span class="st">&quot;#c54950&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb6-46"><a href="tidytuesday.html#cb6-46" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;#333333&quot;</span>, <span class="st">&quot;#c54950&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb6-47"><a href="tidytuesday.html#cb6-47" tabindex="-1"></a>  <span class="fu">coord_polar</span>(<span class="st">&quot;y&quot;</span>, <span class="at">start =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb6-48"><a href="tidytuesday.html#cb6-48" tabindex="-1"></a>  <span class="fu">facet_grid</span>(field <span class="sc">~</span> country, <span class="at">switch =</span> <span class="st">&quot;y&quot;</span>) <span class="sc">+</span></span>
+<span id="cb6-49"><a href="tidytuesday.html#cb6-49" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb6-50"><a href="tidytuesday.html#cb6-50" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb6-51"><a href="tidytuesday.html#cb6-51" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb6-52"><a href="tidytuesday.html#cb6-52" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Still a man&#39;s world&quot;</span>,</span>
+<span id="cb6-53"><a href="tidytuesday.html#cb6-53" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="fu">paste</span>(</span>
+<span id="cb6-54"><a href="tidytuesday.html#cb6-54" tabindex="-1"></a>      <span class="st">&quot;#tidytuesday 16|2019&quot;</span>,</span>
+<span id="cb6-55"><a href="tidytuesday.html#cb6-55" tabindex="-1"></a>      <span class="st">&quot;women among researchers with papers published 2011-2015&quot;</span>,</span>
+<span id="cb6-56"><a href="tidytuesday.html#cb6-56" tabindex="-1"></a>      <span class="at">sep =</span> <span class="st">&quot; • &quot;</span></span>
+<span id="cb6-57"><a href="tidytuesday.html#cb6-57" tabindex="-1"></a>    ),</span>
+<span id="cb6-58"><a href="tidytuesday.html#cb6-58" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">&quot;© 2019 spren9er&quot;</span></span>
+<span id="cb6-59"><a href="tidytuesday.html#cb6-59" tabindex="-1"></a>  )</span>
+<span id="cb6-60"><a href="tidytuesday.html#cb6-60" tabindex="-1"></a></span>
+<span id="cb6-61"><a href="tidytuesday.html#cb6-61" tabindex="-1"></a>plot <span class="sc">+</span></span>
+<span id="cb6-62"><a href="tidytuesday.html#cb6-62" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb6-63"><a href="tidytuesday.html#cb6-63" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb6-64"><a href="tidytuesday.html#cb6-64" tabindex="-1"></a>    <span class="at">panel.border =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb6-65"><a href="tidytuesday.html#cb6-65" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb6-66"><a href="tidytuesday.html#cb6-66" tabindex="-1"></a>    <span class="at">panel.spacing.x =</span> <span class="fu">unit</span>(<span class="fl">0.9</span>, <span class="st">&quot;lines&quot;</span>),</span>
+<span id="cb6-67"><a href="tidytuesday.html#cb6-67" tabindex="-1"></a>    <span class="at">panel.spacing.y =</span> <span class="fu">unit</span>(<span class="fl">0.9</span>, <span class="st">&quot;lines&quot;</span>),</span>
+<span id="cb6-68"><a href="tidytuesday.html#cb6-68" tabindex="-1"></a>    <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb6-69"><a href="tidytuesday.html#cb6-69" tabindex="-1"></a>    <span class="at">axis.ticks.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb6-70"><a href="tidytuesday.html#cb6-70" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb6-71"><a href="tidytuesday.html#cb6-71" tabindex="-1"></a>    <span class="at">strip.background =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb6-72"><a href="tidytuesday.html#cb6-72" tabindex="-1"></a>    <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>, <span class="at">face =</span> <span class="st">&quot;plain&quot;</span>),</span>
+<span id="cb6-73"><a href="tidytuesday.html#cb6-73" tabindex="-1"></a>    <span class="at">strip.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">b =</span> <span class="dv">10</span>)),</span>
+<span id="cb6-74"><a href="tidytuesday.html#cb6-74" tabindex="-1"></a>    <span class="at">strip.text.y =</span> <span class="fu">element_text</span>(</span>
+<span id="cb6-75"><a href="tidytuesday.html#cb6-75" tabindex="-1"></a>      <span class="at">angle =</span> <span class="dv">180</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">r =</span> <span class="dv">10</span>)</span>
+<span id="cb6-76"><a href="tidytuesday.html#cb6-76" tabindex="-1"></a>    ),</span>
+<span id="cb6-77"><a href="tidytuesday.html#cb6-77" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">b =</span> <span class="dv">7</span>)),</span>
+<span id="cb6-78"><a href="tidytuesday.html#cb6-78" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">b =</span> <span class="dv">20</span>)),</span>
+<span id="cb6-79"><a href="tidytuesday.html#cb6-79" tabindex="-1"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(</span>
+<span id="cb6-80"><a href="tidytuesday.html#cb6-80" tabindex="-1"></a>      <span class="at">color =</span> <span class="st">&quot;#333333&quot;</span>, <span class="at">face =</span> <span class="st">&quot;plain&quot;</span>, <span class="at">size =</span> <span class="dv">7</span>, <span class="at">hjust =</span> <span class="dv">1</span>,</span>
+<span id="cb6-81"><a href="tidytuesday.html#cb6-81" tabindex="-1"></a>      <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">t =</span> <span class="dv">20</span>)</span>
+<span id="cb6-82"><a href="tidytuesday.html#cb6-82" tabindex="-1"></a>    )</span>
+<span id="cb6-83"><a href="tidytuesday.html#cb6-83" tabindex="-1"></a>  )</span></code></pre></div>
+</details>
+<p><br></p>
 </div>
 <div id="advanced-r-project---tidyfriday" class="section level2 hasAnchor" number="8.2">
 <h2><span class="header-section-number">8.2</span> Advanced R Project - <code>TidyFriday</code><a href="tidytuesday.html#advanced-r-project---tidyfriday" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -475,20 +857,6 @@ gitbook.start({
 });
 </script>
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    var src = "true";
-    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:")
-      if (/^https?:/.test(src))
-        src = src.replace(/^https?:/, '');
-    script.src = src;
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
 </body>
 
 </html>
